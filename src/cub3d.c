@@ -1,19 +1,25 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 20:38:25 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/09/26 22:10:38 by hfafouri         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
-int main(void)
+
+int	ft_close(t_cube *cube)
+{
+	mlx_destroy_window(cube->mlx, cube->mlx_win);
+	exit(0);
+	return(0);
+}
+
+int	main(int ac, char **av)
 {
     printf("hello world\n");
     return (0);
+    if (ac == 1)
+        return (0);
+    (void)av;
+
+	t_cube data;
+
+	data.mlx = mlx_init();
+	data.mlx_win = mlx_new_window(data.mlx, 1920, 1080, "Hello world!");
+	mlx_hook(data.mlx_win, 17, 1L<<0, ft_close, &data);
+	mlx_loop(data.mlx);
 }
