@@ -10,8 +10,6 @@ int	ft_close(t_cube *cube)
 
 int	main(int ac, char **av)
 {
-    printf("hello world\n");
-    return (0);
     if (ac == 1)
         return (0);
     (void)av;
