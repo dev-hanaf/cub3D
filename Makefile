@@ -1,4 +1,4 @@
-CC = cc
+CC = cc -L./minilibx_linux -fsanitize=address 
 CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 
@@ -6,7 +6,7 @@ GET_NEXT_LINE = ./includes/get_next_line
 LIBFT = ./includes/libft
 GARBAGE = ./includes/gc
 GNL = includes/get_next_line
-MLX = -lmlx_Linux -lXext -lX11
+MLX = -lmlx_Linux -lXext -lX11 
 
 SRC = $(wildcard src/*.c) $(GET_NEXT_LINE)/get_next_line_utils.c $(GET_NEXT_LINE)/get_next_line.c
 
