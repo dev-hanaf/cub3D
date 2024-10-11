@@ -132,7 +132,7 @@ void move_player(t_cube *data, int dx, int dy)
         data->tile_y = data->pixel_y / 32;
 
         fill_square(data, data->pixel_x, data->pixel_y, 0x00000000);
-
+		draw_grid_lines(data);
         mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
     }
 }
@@ -141,13 +141,13 @@ int key_code(int keycode, t_cube *data)
 {
     printf("code = %d\n", keycode);
     if (keycode == 100) // right
-        move_player(data, 1, 0);
+        move_player(data, 2, 0);
     else if (keycode == 97) // left
-        move_player(data, -1, 0);
+        move_player(data, -2, 0);
     else if (keycode == 119) // up
-        move_player(data, 0, -1);
+        move_player(data, 0, -2);
     else if (keycode == 115) // down
-        move_player(data, 0, 1);
+        move_player(data, 0, 2);
     else if(keycode == 65307)
         exit(0);
     return (1);
@@ -155,10 +155,47 @@ int key_code(int keycode, t_cube *data)
 
 
 
+void draw_line(t_cube *data, int x, int y, int length, int is_horizontal)
+{
+    int i = 0;
+
+    while (i < length)
+    {
+        if (is_horizontal)
+            my_mlx_pixel_put(data, x + i, y, 0x000000FF); 
+        else
+            my_mlx_pixel_put(data, x, y + i, 0x000000FF);
+        i++;
+    }
+}
+
+void draw_grid_lines(t_cube *data)
+{
+    int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+    while (i < data->map_dim[1])
+    {
+        draw_line(data, 0, i * 32, data->map_dim[0] * 32, 1);
+		i++;
+    }
+
+    while(j < data->map_dim[0])
+    {
+        draw_line(data, j * 32, 0, data->map_dim[1] * 32, 0);
+		j++;
+    }
+}
+
+
 void fill_map(t_cube *data)
 {
     int i = 0;
     int j = 0;
+
+
     while (i < data->map_dim[1])
     {
         j = 0;
@@ -166,13 +203,14 @@ void fill_map(t_cube *data)
         {
             if (data->map[i][j] == '1')
                 fill_square(data, j * 32, i * 32, 0x00FF0000);
-            else if (data->map[i][j] == '0' || data->map[i][j] == 'P')
+            else if (data->map[i][j] == '0')
                 fill_square(data, j * 32, i * 32, 0x0000FF00);
             j++;
         }
         i++;
     }
     fill_square(data, data->pixel_x, data->pixel_y, 0x00000000);
+    draw_grid_lines(data);
     mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 }
 

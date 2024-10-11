@@ -1,4 +1,4 @@
-CC = cc -L./minilibx_linux -fsanitize=address 
+CC = cc #-L./minilibx_linux -fsanitize=address 
 CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 
