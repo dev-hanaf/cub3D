@@ -103,6 +103,26 @@ void	fill_square(t_cube *data, int start_x, int start_y, int color)
 	}
 }
 
+void draw_ray(t_cube *data, int ray_length)
+{
+    int x;
+    int y;
+    int i = 0;
+
+    int start_x = data->pixel_x + 16;
+    int start_y = data->pixel_y + 16;
+    while (i < ray_length)
+    {	
+        x = start_x + (i * cos(data->rotation_angle));
+        y = start_y + (i * sin(data->rotation_angle));
+
+        my_mlx_pixel_put(data, x, y, 0x00FF00FF);
+
+        i++;
+    }
+}
+
+
 int is_wall(t_cube *data, int x, int y)
 {
     int tile_x = x / 32;
@@ -118,10 +138,10 @@ int check_move(t_cube *data, int new_x, int new_y)
            !is_wall(data, new_x + 32 - 1, new_y + 32 - 1);
 }
 
-void move_player(t_cube *data, int dx, int dy)
+void move_player(t_cube *data, int move_direction)
 {
-    int new_x = data->pixel_x + dx;
-    int new_y = data->pixel_y + dy;
+    int new_x = data->pixel_x + move_direction * cos(data->rotation_angle) * 5;
+    int new_y = data->pixel_y + move_direction * sin(data->rotation_angle) * 5;
 
     if (check_move(data, new_x, new_y))
     {
@@ -132,26 +152,43 @@ void move_player(t_cube *data, int dx, int dy)
         data->tile_y = data->pixel_y / 32;
 
         fill_square(data, data->pixel_x, data->pixel_y, 0x00000000);
-		draw_grid_lines(data);
+        draw_grid_lines(data);
+        draw_ray(data, 50);
         mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
     }
 }
 
+
 int key_code(int keycode, t_cube *data)
 {
     printf("code = %d\n", keycode);
-    if (keycode == 100) // right
-        move_player(data, 2, 0);
-    else if (keycode == 97) // left
-        move_player(data, -2, 0);
-    else if (keycode == 119) // up
-        move_player(data, 0, -2);
-    else if (keycode == 115) // down
-        move_player(data, 0, 2);
-    else if(keycode == 65307)
+    if (keycode == 100)
+	{
+		data->walkdireciton = 1;
+		data->rotation_angle += data->rotation_speed;
+	}
+    else if (keycode == 97)
+	{
+		data->walkdireciton = -1;
+		data->rotation_angle -= data->rotation_speed;
+	}
+    else if (keycode == 119)
+	{
+		data->turndirection = 1;
+        move_player(data, 2);
+	}
+    else if (keycode == 115)
+	{
+		data->turndirection = -1;
+        move_player(data, -2);
+	}
+    else if (keycode == 65307)
         exit(0);
+
+    printf("rotation_angle = %lf\n", data->rotation_angle);
     return (1);
 }
+
 
 
 
@@ -195,7 +232,13 @@ void fill_map(t_cube *data)
     int i = 0;
     int j = 0;
 
-
+	data->turndirection = 0;
+	data->walkdireciton = 0;
+	// data->rotaion_speed = M_PI * 3;
+	data->radius = 3;
+	data->rotation_angle = M_PI / 2;
+	data->rotation_speed = 2 * (M_PI / 180);
+	printf("rotation angle =%lf\n", data->rotation_angle);
     while (i < data->map_dim[1])
     {
         j = 0;
@@ -211,6 +254,7 @@ void fill_map(t_cube *data)
     }
     fill_square(data, data->pixel_x, data->pixel_y, 0x00000000);
     draw_grid_lines(data);
+	draw_ray(data, 50);
     mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 }
 

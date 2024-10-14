@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/10/11 12:38:49 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/10/12 11:56:54 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define CUB3D_H
 
 # include <mlx.h>
+# include <math.h>
 //# include "/home/fafouri/Desktop/cub3D/minilibx_linux/mlx.h"
 # include <stdio.h>
 # include <unistd.h>
@@ -37,10 +38,33 @@ typedef struct s_cube
     int     y_player;
     int     pixel_x;
     int     pixel_y;
+	int		turndirection;
+	int		walkdireciton;
+	float		rotation_speed;
+	int 	radius;
+	float		rotation_angle;
     int tile_x;
     int tile_y;
     
 } t_cube;
+
+typedef struct s_player
+{
+	int		plyr_x;
+	int		plyr_y;
+	double	angle;
+	float	fov_rd;
+	int		rot;
+	int		l_r;
+	int		u_d;
+}	t_player;
+
+typedef struct s_ray
+{
+	double	ray_ngl;
+	double	distance;
+	int		flag;
+}	t_ray;
 
 // struct player
 // {
