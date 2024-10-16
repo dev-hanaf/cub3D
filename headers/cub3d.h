@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/10/12 11:56:54 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:41:44 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef struct s_cube
 	float		rotation_speed;
 	int 	radius;
 	float		rotation_angle;
+	float	fov;
+	int		num_of_rays;
     int tile_x;
     int tile_y;
     

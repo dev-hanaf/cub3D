@@ -122,7 +122,6 @@ void draw_ray(t_cube *data, int ray_length)
     }
 }
 
-
 int is_wall(t_cube *data, int x, int y)
 {
     int tile_x = x / 32;
@@ -145,15 +144,15 @@ void move_player(t_cube *data, int move_direction)
 
     if (check_move(data, new_x, new_y))
     {
+		mlx_clear_window(data->mlx,data->mlx_win);
         fill_square(data, data->pixel_x, data->pixel_y, 0x0000FF00);
         data->pixel_x = new_x;
         data->pixel_y = new_y;
         data->tile_x = data->pixel_x / 32;
         data->tile_y = data->pixel_y / 32;
-
+        draw_ray(data, 50);
         fill_square(data, data->pixel_x, data->pixel_y, 0x00000000);
         draw_grid_lines(data);
-        draw_ray(data, 50);
         mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
     }
 }
@@ -161,15 +160,16 @@ void move_player(t_cube *data, int move_direction)
 
 int key_code(int keycode, t_cube *data)
 {
+	mlx_clear_window(data->mlx,data->mlx_win);
     printf("code = %d\n", keycode);
     if (keycode == 100)
 	{
-		data->walkdireciton = 1;
+		// data->walkdireciton = 1;
 		data->rotation_angle += data->rotation_speed;
 	}
     else if (keycode == 97)
 	{
-		data->walkdireciton = -1;
+		// data->walkdireciton = -1;
 		data->rotation_angle -= data->rotation_speed;
 	}
     else if (keycode == 119)
@@ -183,7 +183,14 @@ int key_code(int keycode, t_cube *data)
         move_player(data, -2);
 	}
     else if (keycode == 65307)
+	{
         exit(0);
+	}
+	fill_map(data);
+	// draw_ray(data, 50);
+	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
+    // draw_ray(data, 50);
+    // mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 
     printf("rotation_angle = %lf\n", data->rotation_angle);
     return (1);
@@ -231,13 +238,10 @@ void fill_map(t_cube *data)
 {
     int i = 0;
     int j = 0;
-
+	
+	mlx_clear_window(data->mlx,data->mlx_win);
 	data->turndirection = 0;
 	data->walkdireciton = 0;
-	// data->rotaion_speed = M_PI * 3;
-	data->radius = 3;
-	data->rotation_angle = M_PI / 2;
-	data->rotation_speed = 2 * (M_PI / 180);
 	printf("rotation angle =%lf\n", data->rotation_angle);
     while (i < data->map_dim[1])
     {
@@ -264,6 +268,10 @@ void player_pos(t_cube *data)
     int j = 0;
     data->tile_x = 0;
     data->tile_y = 0;
+	data->rotation_angle = M_PI / 2;
+	data->rotation_speed = 2 * (M_PI / 180);
+	data->radius = 3;
+	data->fov = 60 * (M_PI / 180);
     while (i < data->map_dim[1])
     {
         j = 0;
