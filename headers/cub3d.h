@@ -13,9 +13,9 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-# include <mlx.h>
+# include "mlx.h"
 # include <math.h>
-//# include "/home/fafouri/Desktop/cub3D/minilibx_linux/mlx.h"
+// # include "./minilibx_linux/mlx.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -45,6 +45,7 @@ typedef struct s_cube
 	float		rotation_angle;
 	float	fov;
 	int		num_of_rays;
+	int		wall_strip_width;
     int tile_x;
     int tile_y;
     

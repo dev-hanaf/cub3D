@@ -6,7 +6,8 @@ GET_NEXT_LINE = ./includes/get_next_line
 LIBFT = ./includes/libft
 GARBAGE = ./includes/gc
 GNL = includes/get_next_line
-MLX = -lmlx_Linux -lXext -lX11  -lm
+# MLX = -lmlx_Linux -lXext -lX11  -lm
+MLX = -Lmlx -lmlx -framework OpenGL -framework AppKit
 
 SRC = $(wildcard src/*.c) $(GET_NEXT_LINE)/get_next_line_utils.c $(GET_NEXT_LINE)/get_next_line.c
 
@@ -24,10 +25,10 @@ all:  $(NAME)
 $(NAME): $(OBJ)
 	@make -C $(GARBAGE)
 	@make -C $(LIBFT)
-	$(CC) $(CFLAGS)  $(OBJ) $(INC) $(MLX) -o $(NAME)
+	$(CC) $(CFLAGS)  $(OBJ) $(INC)  $(MLX) -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC)  -Imlx -c $< -o $@
 
 clean:
 	@make clean -C $(LIBFT)
