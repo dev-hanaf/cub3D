@@ -5,26 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/16 10:12:58 by ajordan-          #+#    #+#             */
-/*   Updated: 2023/12/19 01:30:04 by ahanaf           ###   ########.fr       */
+/*   Created: 2024/11/03 16:24:24 by ahanaf            #+#    #+#             */
+/*   Updated: 2024/11/03 16:24:33 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "cub3d.h"
 
-size_t	ft_strlen(char *s)
-{
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
-
-int	ft_strchr(char *s, int c)
+int	ft_strchr_gnl(char *s, int c)
 {
 	int	i;
 
@@ -42,7 +30,7 @@ int	ft_strchr(char *s, int c)
 	return (0);
 }
 
-char	*ft_strjoin(char *remainder, char *buff)
+char	*ft_strjoin_gnl(char *remainder, char *buff)
 {
 	size_t	i;
 	size_t	j;

@@ -1,14 +1,13 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address 
 AR = ar rcs
 
 GET_NEXT_LINE = ./includes/get_next_line
 LIBFT = ./includes/libft
 GARBAGE = ./includes/gc
-GNL = includes/get_next_line
 MLX = -lmlx_Linux -lXext -lX11
 
-SRC = $(wildcard src/*.c) $(GET_NEXT_LINE)/get_next_line_utils.c $(GET_NEXT_LINE)/get_next_line.c
+SRC = $(wildcard src/*.c)  $(wildcard src/*/*.c)
 
 
 OBJ = $(SRC:.c=.o)
@@ -24,7 +23,7 @@ all:  $(NAME)
 $(NAME): $(OBJ)
 	@make -C $(GARBAGE)
 	@make -C $(LIBFT)
-	$(CC) $(CFLAGS)  $(OBJ) $(INC) $(MLX) -o $(NAME)
+	$(CC) $(CFLAGS)  $(OBJ) $(INC) $(MLX)  $(LIBS) -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
@@ -41,4 +40,6 @@ fclean: clean
 
 re: fclean all
 
+sup: all
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cub3D maps/test.cub
 .SECONDARY : $(OBJ)
