@@ -17,7 +17,7 @@ int	main(int ac, char **av)
 	data.map = NULL;
     if (ac != 2)
 		write_errors(BAD_ARGUMENTS);
-	init_arguments(av[1], &data);
+	init(av[1], &data);
 
 	data.mlx = mlx_init();
 	if (data.mlx == NULL)

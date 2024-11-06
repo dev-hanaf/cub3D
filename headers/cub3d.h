@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/03 16:33:20 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/06 04:17:18 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,48 @@ typedef enum e_status
 	FD,
 	FILE_NAME,
     FAILED_ALLOCATION,
-    BAD_ARGUMENTS
+    BAD_ARGUMENTS,
+	DUPLICATE,
+	MISSED
 
 }			t_status;
 
+typedef struct s_textures
+{
+	int no;
+	int so;
+	int we;
+	int ea;
+	int f;
+	int c;
+	int map;
+}	t_textures;
+
+typedef struct s_map_data
+{
+	char *key;
+	char *value;
+}	t_map_data;
+
 typedef struct s_cube
 {
-	void	*mlx;
-	void	*mlx_win;
-	char	**map;
+	void		*mlx;
+	void		*mlx_win;
+	char		**map;
+	t_map_data 	*object;	
+	t_textures	*textures;
 }			t_cube;
 
-void		init_arguments(char *av, t_cube *data);
+void		init(char *av, t_cube *data);
 char	    *get_next_line(int fd, int flag);
+bool 		controller(t_cube *data);
 
 /********************** utils ******************************** */
 void		write_errors(t_status status);
 void        display_map(t_cube *data);
 void        free_map(t_cube *data);
+void     	lines_lenght(int fd, int *i);
+bool 		white_spaces(char c);
+void	ft_strcpy(char *dst, char c);
+
 #endif

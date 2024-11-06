@@ -17,20 +17,21 @@ bool file_name(char *path)
 }
 
 
-void init_arguments(char *av, t_cube *data)
+void init(char *av, t_cube *data)
 {
     int fd;
     int i;
     char *line;
 
-    i = 0;
     file_name(av);
     fd = open(av, O_RDONLY);
     if (fd == FAILURE)
         write_errors(FD);
-    data->map = ft_calloc(sizeof(char **), 20);
+    // lines_lenght(fd, &i);
+    data->map = ft_calloc(sizeof(char *), 100);
     if (!data->map)
         write_errors(FAILED_ALLOCATION);
+    i = 0;
     line = NULL;
     while (true)
     {
@@ -44,8 +45,8 @@ void init_arguments(char *av, t_cube *data)
         data->map[i++] =  ft_strdup(line);
         free(line);
     }
-    free(line);
-    display_map(data);
+    // display_map(data);
+    controller(data);
     free_map(data);
     data->map = NULL;
 }
