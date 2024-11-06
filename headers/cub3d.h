@@ -13,15 +13,17 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-# include "mlx.h"
+//# include "mlx.h"
 # include <math.h>
+# include "/home/fafouri/Desktop/cub3D/minilibx_linux/mlx.h"
 // # include "./minilibx_linux/mlx.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include <string.h>
-# include "../includes/get_next_line/get_next_line.h"
+# include "/home/fafouri/Desktop/cub3D/includes/get_next_line/get_next_line.h"
+//# include "../includes/get_next_line/get_next_line.h"
 
 typedef struct s_cube
 {
@@ -29,21 +31,24 @@ typedef struct s_cube
 	void	*mlx_win;
     int     map_dim[2];
     char    **map;
+	double		wallhitx;
+	double		wallhity;
     void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-    int     x_player;
-    int     y_player;
-    int     pixel_x;
-    int     pixel_y;
+    double     x_player;
+    double     y_player;
+    double     pixel_x;
+    double     pixel_y;
 	int		turndirection;
 	int		walkdireciton;
 	float		rotation_speed;
 	int 	radius;
 	float		rotation_angle;
 	float	fov;
+	double 		closest_dis;
 	int		num_of_rays;
 	int		wall_strip_width;
     int tile_x;

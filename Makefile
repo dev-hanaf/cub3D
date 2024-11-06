@@ -1,4 +1,4 @@
-CC = cc -fsanitize=address #-L./minilibx_linux -fsanitize=address 
+CC = cc -L./minilibx_linux -fsanitize=address 
 CFLAGS = -Wall -Wextra -Werror -Ofast
 AR = ar rcs
 
@@ -6,8 +6,8 @@ GET_NEXT_LINE = ./includes/get_next_line
 LIBFT = ./includes/libft
 GARBAGE = ./includes/gc
 GNL = includes/get_next_line
-# MLX = -lmlx_Linux -lXext -lX11  -lm
-MLX = -Lmlx -lmlx -framework OpenGL -framework AppKit
+MLX = -lmlx_Linux -lXext -lX11 -lm
+#MLX = -Lmlx -lmlx -framework OpenGL -framework AppKit
 
 SRC = $(wildcard src/*.c) $(GET_NEXT_LINE)/get_next_line_utils.c $(GET_NEXT_LINE)/get_next_line.c
 
