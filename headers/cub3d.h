@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/06 04:17:18 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/07 06:22:53 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ typedef enum e_status
     FAILED_ALLOCATION,
     BAD_ARGUMENTS,
 	DUPLICATE,
-	MISSED
+	MISSED,
+	INVALID_ELEMENT,
+	BAD_POSITION,
+	PLAYERS
 
 }			t_status;
 
@@ -57,8 +60,14 @@ typedef struct s_map_data
 
 typedef struct s_cube
 {
+	int 		idx;
 	void		*mlx;
 	void		*mlx_win;
+	size_t		height;
+	size_t		width;
+	int			x;
+	int 		y;
+	int 		counter;
 	char		**map;
 	t_map_data 	*object;	
 	t_textures	*textures;
@@ -69,9 +78,9 @@ char	    *get_next_line(int fd, int flag);
 bool 		controller(t_cube *data);
 
 /********************** utils ******************************** */
-void		write_errors(t_status status);
+void		write_errors(t_cube *data, t_status status);
 void        display_map(t_cube *data);
-void        free_map(t_cube *data);
+void 		free_all(t_cube *data);
 void     	lines_lenght(int fd, int *i);
 bool 		white_spaces(char c);
 void	ft_strcpy(char *dst, char c);

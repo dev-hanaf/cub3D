@@ -6,80 +6,86 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 02:06:43 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/06 07:05:42 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/07 06:31:15 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void check_directions_colors(t_cube *data)
+int check_directions_colors(t_cube *data, char *key, int idx)
 {
     int i;
     t_textures *p;
+    bool flag;
 
+    flag = false;
     i = 0;
     p = data->textures;
-
-    // TODO free()
     if (p->c > 1 || p->f > 1)
-       write_errors(DUPLICATE);
+        flag = true;
     if (p->ea > 1 || p->no > 1 || p->so > 1 || p->we > 1)
-        write_errors(DUPLICATE);
-    i = p->c + p->f + p->ea + p->no + p->so + p->we;
-    if (p->map == 1)
+        flag = true;
+    if (flag)
     {
-        if (i == 6)
-            return ;
-        else
-            write_errors(MISSED);
+        free(key);
+        while (i < idx)
+        {
+            free(data->object[i].key);
+            free(data->object[i].value);
+            i++;
+        }
+        write_errors(data, DUPLICATE);
+    }
+    i = p->c + p->f + p->ea + p->no + p->so + p->we;
+    return (i);
+}
+
+void directions_colors(t_cube *data, char *key, int idx)
+{
+    int i;
+    char *keys[6] = {"SO", "NO", "WE", "EA", "F", "C"};
+    int *keys_lower[6] = {&data->textures->so, &data->textures->no, &data->textures->we, &data->textures->ea, &data->textures->f, &data->textures->c};
+    
+    i = 0;
+    while (i < 6 && keys[i] != key)
+    {
+        if (!ft_strncmp(key, keys[i], ft_strlen(keys[i])) && ft_strlen(key) == ft_strlen(keys[i]))
+        {
+            (*keys_lower[i])++;
+            check_directions_colors(data, key, idx);
+            break;
+        }
+        else if (i == 5)
+        {
+            dprintf(2, "in direction_colors no texture found\n");
+            exit(EXIT_FAILURE);
+        }
+        i++;       
     }
 }
 
-void directions_colors(t_cube *data, t_map_data *object, char *key)
+char	*ft_strncpy_2(char *dest, char *src, unsigned int n)
 {
-    // if (!ft_strncmp("SO", key, 3))
-    // {
-        data->textures->so++;
-        check_directions_colors(data);
-        object->key = ft_strdup(key);
-//     }
-//     else if (!ft_strncmp("NO", key, 3))
-// {
-//         data->textures->no++;
-//         check_directions_colors(data);
-//         object->key = ft_strdup(key);
-// }
-//     else if (!ft_strncmp("WE", key, 3))
-//     {
-//         data->textures->we++;
-//     }
-//     else if (!ft_strncmp("EA", key, 3))
-//     {
-//         data->textures->ea++;
-//         check_directions_colors(data);
-//         object->key = ft_strdup(key);
-//     }
-//     else if (!ft_strncmp("F", key, 2))
-//     {
-//         data->textures->f++;
-//         check_directions_colors(data);
-//         object->key = ft_strdup(key);
-//     }
-//     else if (!ft_strncmp("C", key, 2))
-//     {
-//         data->textures->c++;
-//         check_directions_colors(data);
-//         object->key = ft_strdup(key);
-//     }
-//     else
-//     {
-//         data->map++;
-//         check_directions_colors(data);
-//         object->key = ft_strdup("map");
-//     }
-    free(key);
+	unsigned int	i;
+
+	i = 0;
+	while (src[i] && i < n)
+	{
+        if (src[i] == 10)
+            break;
+		dest[i] = src[i];
+		++i;
+	}
+	while (i < n)
+	{
+		dest[i] = ' ';
+		i++;
+	}
+	dest[i] = 0;
+	return (dest);
 }
 
+void parse_map(t_cube *data);
 
 bool controller(t_cube *data)
 {
@@ -91,8 +97,18 @@ bool controller(t_cube *data)
     char *value;
     
     data->object = malloc(sizeof(t_map_data) * 6);
+    if (!data->object)
+        write_errors(data, FAILED_ALLOCATION);
     data->textures = malloc(sizeof(t_textures));
+    if (!data->textures)
+        write_errors(data, FAILED_ALLOCATION);
     ft_memset(data->textures, 0 ,sizeof(t_textures));
+
+
+
+
+
+    
     i = 0;
     idx= 0;
     while (data->map[i])
@@ -110,9 +126,12 @@ bool controller(t_cube *data)
             key = ft_strjoin(key, c);
             j++;
         }
-        if (key && ( key[0] != '1' && key[0] != '0' /* TODO change [0] with j*/))
+
+
+        if (key)
         {
-            printf("%d     %s\n", idx, key);
+            data->idx = idx;
+            directions_colors(data, key, idx);
             data->object[idx].key = ft_strdup(key);
             while (data->map[i][j] != 10 && white_spaces(data->map[i][j]))
                 j++;
@@ -133,49 +152,141 @@ bool controller(t_cube *data)
 
 
 
-
-
-
-
-
-
-
+    
+    if (check_directions_colors(data, NULL, 0) != 6)
+        write_errors(data, MISSED);
 
     
+    data->textures->map = 1;
+    size_t h = i;
+    size_t w = 0;
+    int   tmp_i = i;
+
+
+    while (data->map[i])
+    {
+        if (ft_strlen(data->map[i]) > w)
+            w = ft_strlen(data->map[i]) - 1;
+        i++;        
+    }
+    h = i - h;
+
+    
+
+    data->height = h;
+    data->width = w;
+    char    **map;
+    j = 0;
+
+    map = malloc(sizeof(char *) * (data->height + 1));
+    if (map == NULL)
+        write_errors(data, FAILED_ALLOCATION);
+    i = tmp_i;
+    while (data->map[i])
+    {
+        map[j] = malloc(sizeof(char) * (data->width + 1));
+        if (map[j] == NULL)
+            write_errors(data, FAILED_ALLOCATION);
+        ft_strncpy_2(map[j++], data->map[i++], data->width);
+    }
+    map[j] = '\0';
+    
+    
+
+    int xx = 0;
+    while (data->map[xx])
+        free(data->map[xx++]);
+    free(data->map);
+    data->map = map;
+    /////////////// just to display the new map
+    xx = 0;
+    while (map[xx])
+    {
+        printf("|%s|\n", map[xx]);
+        xx++;
+    }
+
+    
+
+    /////////////// just to display the jey and value
     j = 0;
     while (j < 6)
     {
         printf("key ==> %s, value ==> %s\n", data->object[j].key, data->object[j].value);
-        printf("%d ",data->textures->c);
-        printf("%d ",data->textures->f);
-        printf("%d ",data->textures->we);
-        printf("%d ",data->textures->no);
         j++;
     }
-    int x = 0;
-    while (x < 6)
+
+
+
+
+    /******************************************MAP Parsing*********************************************/
+    parse_map(data);    
+    return (true);
+}
+
+void map_elements(t_cube *data, char c)
+{
+    if (c == '1' || c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W'
+        || c == ' ')
+        return ;
+    write_errors(data, INVALID_ELEMENT);
+}
+
+
+void	general_check(t_cube *data, int i, int j)
+{
+	char	**s;
+    char    c;
+	s = data->map;
+    c = s[i][j];
+	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
+	{
+		if (i == 0 || i == (int)(data->height) - 1 || j == 0
+			|| j == (int)(data->width) - 1)
+			write_errors(data, BAD_POSITION);
+		if (s[(i) - 1][j] == ' ' || s[(i) + 1][j] == ' ' || s[i][j
+			- 1] == ' ' || s[i][j + 1] == ' ')
+                write_errors(data, BAD_POSITION);
+	}
+}
+
+void set_player(t_cube *data, char c, int i, int j)
+{
+    if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
     {
-        free(data->object[x].key);
-        free(data->object[x].value);
-        x++;
+        data->x = j;
+        data->y = i;
+        data->counter++;
     }
-    free(data->textures);
-    free(data->object);
-    
-    puts("\n");
-    int len_map = 0;
-    j  = i;
-    while (data->map[i])
+    if (data->counter > 1)
+        write_errors(data, PLAYERS);
+}
+void surrounded_check(t_cube *data)
+{
+    size_t i;
+    size_t j;
+
+    i = 0;
+    data->counter = 0;
+    while (i < data->height)
     {
-        len_map = 0;
+        j = 0;
+        while (j < data->width)
+        {
+            map_elements(data, data->map[i][j]);
+            set_player(data, data->map[i][j], i, j);
+            general_check(data, i , j);
+            j++;
+        }
         i++;
     }
-    
-    char **new_map = malloc(sizeof(char *) * (len_map + 1));
-    int h = 0;
-    while (h < len_map)
-        new_map[h++] = ft_strdup(data->map[j++]);
-    free_map(data);
-    data->map = new_map;
-    return (true);
+    if (data->counter != 1)
+        write_errors(data, PLAYERS);
+}
+
+
+
+void parse_map(t_cube *data)
+{
+    surrounded_check(data);
 }

@@ -1,6 +1,35 @@
 #include "cub3d.h"
 
-void write_errors(t_status status)
+void free_all(t_cube *data)
+{
+    int i;
+
+    i = 0;
+    if (data)
+    {
+        if (data->map)
+        {
+            while (data->map[i])
+                free(data->map[i++]);
+            free(data->map);
+        }
+        
+        i = 0;
+        if (data->object &&  data->textures->map)
+        {
+            while (i <= data->idx)
+            {
+                free(data->object[i].key);
+                free(data->object[i++].value);
+            }
+            free(data->object);
+        }
+        if (data->textures)
+            free(data->textures);
+    }
+}
+
+void write_errors(t_cube *data, t_status status)
 {
     if (status == FILE_NAME)
         dprintf(2, "Error: bad file name\n");
@@ -14,6 +43,13 @@ void write_errors(t_status status)
 		dprintf(2, "Error: detect a duplicate\n");
     else if (status == MISSED)
 		dprintf(2, "Error: missed arguments\n");
+    else if (status == INVALID_ELEMENT)
+		dprintf(2, "Error: invalid element\n");
+    else if (status == BAD_POSITION)
+		dprintf(2, "Error: invalid position\n");
+    else if (status == PLAYERS)
+		dprintf(2, "Error: invalid player number\n");
+    free_all(data);
     exit(EXIT_FAILURE);
 }
 
@@ -26,38 +62,6 @@ void display_map(t_cube *data)
     {
         printf("%s\n", data->map[i++]);
     }
-}
-
-void free_map(t_cube *data)
-{
-    int i;
-
-    i = 0;
-    while (data->map && data->map[i])
-        free(data->map[i++]);
-    free(data->map);
-    // free(data->object);
-}
-
-void     lines_lenght(int fd, int *i)
-{
-    char *line;
-
-    *i = 0;
-    line = NULL;
-    while (true)
-    {
-        *i += +1;
-        line = get_next_line(fd, 0);
-        if (line == NULL)
-        {
-            get_next_line(fd, 1);
-            free(line);
-            break;
-        }
-        free(line);
-    }
-    free(line);
 }
 
 bool white_spaces(char c)

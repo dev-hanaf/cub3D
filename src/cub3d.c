@@ -5,6 +5,7 @@ int	ft_close(t_cube *cube)
 {
 	mlx_destroy_window(cube->mlx, cube->mlx_win);
 	mlx_destroy_display(cube->mlx);
+	free_all(cube);
 	free(cube->mlx);
 	exit(EXIT_SUCCESS);
 	return(0);
@@ -16,7 +17,7 @@ int	main(int ac, char **av)
 
 	data.map = NULL;
     if (ac != 2)
-		write_errors(BAD_ARGUMENTS);
+		write_errors(NULL ,BAD_ARGUMENTS);
 	init(av[1], &data);
 
 	data.mlx = mlx_init();
@@ -27,6 +28,6 @@ int	main(int ac, char **av)
 		return (free(data.mlx), 1);
 	mlx_hook(data.mlx_win, 17, 1L<<0, ft_close, &data);
 	mlx_loop(data.mlx);
-	// free_map(&data);
+	free_all(&data);
 	free(data.mlx);
 }
