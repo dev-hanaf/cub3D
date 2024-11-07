@@ -133,6 +133,19 @@ void fill_player_square(t_cube *data, int start_x, int start_y, int color)
 //     return (data->map[tile_y][tile_x] == '1');
 // }
 
+
+int hit_wall(t_cube *data, double x, double y)
+{
+    int tile_x = floor(x / 32);
+    int tile_y = floor(y / 32);
+    
+    if (tile_x < 0 || tile_x >= data->map_dim[0] || 
+        tile_y < 0 || tile_y >= data->map_dim[1])
+        return 1; 
+        
+    return (data->map[tile_y][tile_x] == '1');
+}
+
 int is_wall(t_cube *data, int x, int y)
 {
     int tile_x = x / 32;
@@ -159,14 +172,14 @@ void draw_ray(t_cube *data, float ray_angle, int ray_length)
         y = start_y + (i * sin(ray_angle));
         
 
-        if (x < 0 || x >= (data->map_dim[0] * 32) || 
-            y < 0 || y >= (data->map_dim[1] * 32))
-            break;  
+        // if (x < 0 || x >= (data->map_dim[0] * 32) || 
+        //     y < 0 || y >= (data->map_dim[1] * 32))
+        //     break;  
 
         // if (is_wall(data, x, y))
         //     break;
             
-        my_mlx_pixel_put(data, x, y, 0x00FF00FF);  
+        my_mlx_pixel_put(data, x, y, 0xFFFFFFFF);  
         i++;
     }
 }
@@ -187,91 +200,153 @@ int check_move(t_cube *data, int new_x, int new_y)
            !is_wall(data, new_x + 8 - 1, new_y + 8 - 1);
 }
 
-void cast(t_cube *data, int ray_id, float ray_angle)
+void cast(t_cube *data, int ray_id, float ray_angle) 
 {
+    ray_angle = normalize_angle(ray_angle);
     // Horizontal intersection
 
     double xsteps_h;
 	double ysteps_h;
-    double xintercept_h;
+
+	double xintercept_h;
 	double yintercept_h;
-
-    yintercept_h = data->pixel_y;
-    xintercept_h = data->pixel_x + (data->pixel_y - yintercept_h) / tan(ray_angle);
-
+    
+    yintercept_h = floor(data->pixel_y / 32) * 32;
+    if (ray_angle < M_PI) 
+        yintercept_h += 32;
+    xintercept_h = data->pixel_x + (yintercept_h - data->pixel_y) / tan(ray_angle);
+    
     ysteps_h = 32;
-    xsteps_h = ysteps_h / tan(ray_angle);
+    if (ray_angle > M_PI)
+        ysteps_h = -32;
+        
+    xsteps_h = 32 / tan(ray_angle);
+    
+	if (ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2) 
+    	xsteps_h = -fabs(xsteps_h);
+    else
+	{
+    	xsteps_h = fabs(xsteps_h);
+	}
+    
+	//====== check hit wall hor
+	double check_x = 0;
+	double check_y = 0;
 
-    if (ray_angle > M_PI) 
-    { 
-        ysteps_h *= -1;
-        xsteps_h *= -1;
+	double next_x_h = xintercept_h;
+    double next_y_h = yintercept_h;
+	int found_wall_h = 0;
+
+    while (!found_wall_h)
+	{
+		check_x = next_x_h;
+		if (ray_angle > M_PI) 
+			check_y = next_y_h - 1;
+		else 
+			check_y = next_y_h;
+        if (hit_wall(data, check_x, check_y))
+		{
+            xintercept_h = next_x_h;
+            yintercept_h = next_y_h;
+            found_wall_h = 1;
+            printf("\nHorizontal intersection: y = %f, x = %f, ray_id = %d\n", yintercept_h, xintercept_h, ray_id);
+        } 
+		else 
+		{
+            next_x_h += xsteps_h;
+            next_y_h += ysteps_h;
+            if (next_x_h < 0 || next_x_h >= data->map_dim[0] * 32 || next_y_h < 0 || next_y_h >= data->map_dim[1] * 32) 
+			{
+                found_wall_h = 1;
+                xintercept_h = next_x_h;
+                yintercept_h = next_y_h;
+            }
+		}
+
     }
-
-    while (1)
-    {
-        if (is_wall(data, xintercept_h, yintercept_h))
-        {
-            printf("\n\nHorizontal intersection: y = %f, x = %f, ray_id = %d\n\n", yintercept_h, xintercept_h, ray_id);
-            break;
-        }
-        xintercept_h += xsteps_h;
-        yintercept_h += ysteps_h;
-    }
-
+    
     // Vertical intersection 
-
     double xsteps_v;
 	double ysteps_v;
-    double xintercept_v;
+
+	double xintercept_v;
 	double yintercept_v;
+    
 
-    yintercept_v = data->pixel_y;
-    xintercept_v = data->pixel_x + (data->pixel_y - yintercept_v) * tan(ray_angle);
+    xintercept_v = floor(data->pixel_x / 32) * 32;
+    if (ray_angle < M_PI_2 || ray_angle > 3 * M_PI_2) 
+        xintercept_v += 32;
 
+    yintercept_v = data->pixel_y + (xintercept_v - data->pixel_x) * tan(ray_angle);
+    
+	//============= steps
     xsteps_v = 32;
-    ysteps_v = tan(ray_angle) * xsteps_v;
+    if (ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2) 
+        xsteps_v = -32;
+        
+    ysteps_v = 32 * tan(ray_angle);
+    if (ray_angle > M_PI)
+        ysteps_v = -fabs(ysteps_v);
+    else
+	{
+        ysteps_v = fabs(ysteps_v);
+	}
+	//====== check hit wall ver
+	check_x = 0;
+	check_y = 0;
+	double next_x_v = xintercept_v;
+    double next_y_v = yintercept_v;
+	int found_wall_v = 0;
 
-    if (ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2)
-    { 
-        xsteps_v *= -1;
-        ysteps_v *= -1;
+    while (!found_wall_v) 
+	{
+		if (ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2)
+			check_x = next_x_v - 1;
+		else 
+			check_x = next_x_v;
+		check_y = next_y_v;
+        if (hit_wall(data, check_x, check_y)) 
+		{
+            xintercept_v = next_x_v;
+            yintercept_v = next_y_v;
+            found_wall_v = 1;
+            printf("\nVertical intersection: y = %f, x = %f, ray_id = %d\n", yintercept_v, xintercept_v, ray_id);
+        } 
+		else 
+		{
+            next_x_v += xsteps_v;
+            next_y_v += ysteps_v;
+            if (next_x_v < 0 || next_x_v >= data->map_dim[0] * 32 || next_y_v < 0 || next_y_v >= data->map_dim[1] * 32) 
+				{
+                found_wall_v = 1;
+                xintercept_v = next_x_v;
+                yintercept_v = next_y_v;
+            }
+		}
     }
 
-    while (1)
-    {
-        if (is_wall(data, xintercept_v, yintercept_v))
-        {
-            printf("\n\nVertical Intersection: y = %f, x = %f, ray_id = %d\n\n", yintercept_v, xintercept_v, ray_id);
-            break;
-        }
-        xintercept_v += xsteps_v;
-        yintercept_v += ysteps_v;
-    }
-
+	// == calcul distance 
     double dx_h = xintercept_h - data->pixel_x;
     double dy_h = yintercept_h - data->pixel_y;
-
-    double distance_h = dx_h * cos(ray_angle) + dy_h * sin(ray_angle);
-
+    double distance_h = sqrt(dx_h * dx_h + dy_h * dy_h);
+    
     double dx_v = xintercept_v - data->pixel_x;
     double dy_v = yintercept_v - data->pixel_y;
-	
-    double distance_v = dx_v * cos(ray_angle) + dy_v * sin(ray_angle);
-
-	data->closest_dis = 0;
-	printf("@@@@ distance_h = %f\n",distance_h);
-	printf("@@@@ distance_v = %f\n",distance_v);
-    if (distance_h < distance_v)
-    {
-		// printf("distance_h = %d\n",distance_h);
-        printf("\nHORIZONTAL x = %f, y = %f)\n", xintercept_h, yintercept_h);
-		data->closest_dis = (int)distance_h;
-    }
-    else
-    {
-        printf("\nVERTICAL x = %f, y = %f)\n", xintercept_v, yintercept_v);
-		data->closest_dis = (int)distance_v;
+    double distance_v = sqrt(dx_v * dx_v + dy_v * dy_v);
+    
+    if (distance_h < distance_v) 
+	{
+        data->closest_dis = distance_h;
+        data->wallhitx = xintercept_h;
+        data->wallhity = yintercept_h;
+        printf("\nHORIZONTAL x = %f, y = %f\n", xintercept_h, yintercept_h);
+    } 
+	else 
+	{
+        data->closest_dis = distance_v;
+        data->wallhitx = xintercept_v;
+        data->wallhity = yintercept_v;
+        printf("\nVERTICAL x = %f, y = %f\n", xintercept_v, yintercept_v);
     }
 }
 
@@ -282,26 +357,17 @@ void cast_all_rays(t_cube *data)
     float ray_angle = data->rotation_angle - (data->fov / 2);
 	data->wallhitx = 0;
 	data->wallhity = 0;
-
-
-    while (ray_angle < 0)
-        ray_angle += 2 * M_PI;
-    while (ray_angle > 2 * M_PI)
-        ray_angle -= 2 * M_PI;
     
     while(ray_id < data->num_of_rays)
     {   
-		// if (ray_id == data->num_of_rays / 2)
-		// {
-			cast(data ,ray_id, ray_angle);
+        ray_angle = normalize_angle(ray_angle);
+		//if (ray_id == data->num_of_rays / 2)
+		//{
+       		cast(data, ray_id, ray_angle);
         	draw_ray(data, ray_angle, data->closest_dis);
-		// }
+		//}
+        
         ray_angle += data->fov / data->num_of_rays;
-        if (ray_angle < 0)
-            ray_angle += 2 * M_PI;
-        if (ray_angle > 2 * M_PI)
-            ray_angle -= 2 * M_PI;
-            
         ray_id++;
     }
 }
@@ -389,7 +455,6 @@ void draw_grid_lines(t_cube *data)
         draw_line(data, 0, i * 32, data->map_dim[0] * 32, 1);
 		i++;
     }
-
     while(j < data->map_dim[0])
     {
         draw_line(data, j * 32, 0, data->map_dim[1] * 32, 0);
