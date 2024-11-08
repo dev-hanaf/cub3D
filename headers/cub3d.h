@@ -51,6 +51,10 @@ typedef struct s_cube
 	double 		closest_dis;
 	int		num_of_rays;
 	int		wall_strip_width;
+	int		ray_up;
+	int		ray_down;
+	int		ray_left;
+	int		ray_right;
     int tile_x;
     int tile_y;
     

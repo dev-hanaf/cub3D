@@ -200,10 +200,24 @@ int check_move(t_cube *data, int new_x, int new_y)
            !is_wall(data, new_x + 8 - 1, new_y + 8 - 1);
 }
 
-void cast(t_cube *data, int ray_id, float ray_angle) 
+void cast(t_cube *data, float ray_angle) 
 {
     ray_angle = normalize_angle(ray_angle);
     // Horizontal intersection
+
+    data->ray_up = 0;
+    data->ray_down = 0;
+    data->ray_right = 0;
+    data->ray_left = 0;
+
+    if (ray_angle > 0 && ray_angle < M_PI)
+        data->ray_down = 1;
+    if (!data->ray_down)
+        data->ray_up = 1;
+    if (ray_angle < M_PI / 2 || ray_angle > 3 * M_PI / 2)
+        data->ray_right = 1;
+    if (!data->ray_right)
+        data->ray_left = 1; 
 
     double xsteps_h;
 	double ysteps_h;
@@ -237,6 +251,12 @@ void cast(t_cube *data, int ray_id, float ray_angle)
     double next_y_h = yintercept_h;
 	int found_wall_h = 0;
 
+    if(data->ray_up)
+    {
+        printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+        next_y_h--;
+    }
+
     while (!found_wall_h)
 	{
 		check_x = next_x_h;
@@ -249,7 +269,6 @@ void cast(t_cube *data, int ray_id, float ray_angle)
             xintercept_h = next_x_h;
             yintercept_h = next_y_h;
             found_wall_h = 1;
-            printf("\nHorizontal intersection: y = %f, x = %f, ray_id = %d\n", yintercept_h, xintercept_h, ray_id);
         } 
 		else 
 		{
@@ -285,7 +304,7 @@ void cast(t_cube *data, int ray_id, float ray_angle)
         xsteps_v = -32;
         
     ysteps_v = 32 * tan(ray_angle);
-    if (ray_angle > M_PI)
+    if (ray_angle > M_PI && ysteps_v < 0)
         ysteps_v = -fabs(ysteps_v);
     else
 	{
@@ -298,6 +317,10 @@ void cast(t_cube *data, int ray_id, float ray_angle)
     double next_y_v = yintercept_v;
 	int found_wall_v = 0;
 
+    if(data->ray_left)
+    {
+        next_x_v--;
+    }
     while (!found_wall_v) 
 	{
 		if (ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2)
@@ -310,7 +333,6 @@ void cast(t_cube *data, int ray_id, float ray_angle)
             xintercept_v = next_x_v;
             yintercept_v = next_y_v;
             found_wall_v = 1;
-            printf("\nVertical intersection: y = %f, x = %f, ray_id = %d\n", yintercept_v, xintercept_v, ray_id);
         } 
 		else 
 		{
@@ -324,7 +346,7 @@ void cast(t_cube *data, int ray_id, float ray_angle)
             }
 		}
     }
-
+    // xintercept_v -= 1;
 	// == calcul distance 
     double dx_h = xintercept_h - data->pixel_x;
     double dy_h = yintercept_h - data->pixel_y;
@@ -361,11 +383,11 @@ void cast_all_rays(t_cube *data)
     while(ray_id < data->num_of_rays)
     {   
         ray_angle = normalize_angle(ray_angle);
-		//if (ray_id == data->num_of_rays / 2)
-		//{
-       		cast(data, ray_id, ray_angle);
+		if (ray_id == data->num_of_rays / 2)
+		{
+       		cast(data, ray_angle);
         	draw_ray(data, ray_angle, data->closest_dis);
-		//}
+		}
         
         ray_angle += data->fov / data->num_of_rays;
         ray_id++;
