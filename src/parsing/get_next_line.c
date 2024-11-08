@@ -12,8 +12,7 @@
 
 #include "cub3d.h"
 
-
-int	ft_strchr_gnl(char *s, int c);
+int		ft_strchr_gnl(char *s, int c);
 char	*ft_strjoin_gnl(char *remainder, char *buff);
 char	*ft_get_line(char *remainder);
 char	*ft_new_remainder(char *remainder);
