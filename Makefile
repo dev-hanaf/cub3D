@@ -1,5 +1,5 @@
-CC = cc -L./minilibx_linux -fsanitize=address 
-CFLAGS = -Wall -Wextra -Werror -Ofast
+CC = cc -fsanitize=address  #-L./minilibx_linux -fsanitize=address 
+CFLAGS = -Ofast
 AR = ar rcs
 
 GET_NEXT_LINE = ./includes/get_next_line

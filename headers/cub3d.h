@@ -13,17 +13,17 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-//# include "mlx.h"
+# include "mlx.h"
 # include <math.h>
-# include "/home/fafouri/Desktop/cub3D/minilibx_linux/mlx.h"
+//# include "/home/fafouri/Desktop/cub3D/minilibx_linux/mlx.h"
 // # include "./minilibx_linux/mlx.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include <string.h>
-# include "/home/fafouri/Desktop/cub3D/includes/get_next_line/get_next_line.h"
-//# include "../includes/get_next_line/get_next_line.h"
+//# include "/home/fafouri/Desktop/cub3D/includes/get_next_line/get_next_line.h"
+# include "../includes/get_next_line/get_next_line.h"
 
 typedef struct s_cube
 {
@@ -57,7 +57,6 @@ typedef struct s_cube
 	int		ray_right;
     int tile_x;
     int tile_y;
-    
 } t_cube;
 
 typedef struct s_player

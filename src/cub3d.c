@@ -160,26 +160,30 @@ int is_wall(t_cube *data, int x, int y)
 
 void draw_ray(t_cube *data, float ray_angle, int ray_length)
 {
-    double x;
-    double y;
     int i = 0;
     double start_x = data->pixel_x + 4;
     double start_y = data->pixel_y + 4;
 
-    while (i < ray_length)
-    {   
-        x = start_x + (i * cos(ray_angle));
-        y = start_y + (i * sin(ray_angle));
-        
+    
+    double dx = data->wallhitx - start_x;
+    double dy = data->wallhity - start_y;
 
-        // if (x < 0 || x >= (data->map_dim[0] * 32) || 
-        //     y < 0 || y >= (data->map_dim[1] * 32))
-        //     break;  
 
-        // if (is_wall(data, x, y))
-        //     break;
-            
-        my_mlx_pixel_put(data, x, y, 0xFFFFFFFF);  
+    double steps = fmax(fabs(dx), fabs(dy));
+   
+    printf("ray_lenght = %d | distance = %f\n", ray_length ,steps);
+
+    dx /= steps;
+    dy /= steps;
+    
+    double x = start_x;
+    double y = start_y;
+    
+    while (i <= steps && !hit_wall(data, x, y))
+    {
+        my_mlx_pixel_put(data, round(x), round(y), 0xFFFFFFFF);
+        x += dx;
+        y += dy;
         i++;
     }
 }
@@ -205,19 +209,10 @@ void cast(t_cube *data, float ray_angle)
     ray_angle = normalize_angle(ray_angle);
     // Horizontal intersection
 
-    data->ray_up = 0;
-    data->ray_down = 0;
-    data->ray_right = 0;
-    data->ray_left = 0;
-
-    if (ray_angle > 0 && ray_angle < M_PI)
-        data->ray_down = 1;
-    if (!data->ray_down)
-        data->ray_up = 1;
-    if (ray_angle < M_PI / 2 || ray_angle > 3 * M_PI / 2)
-        data->ray_right = 1;
-    if (!data->ray_right)
-        data->ray_left = 1; 
+    data->ray_up = ray_angle > M_PI;
+    data->ray_down = !data->ray_up;
+    data->ray_right = ray_angle < M_PI_2 || ray_angle > 3 * M_PI_2;
+    data->ray_left = !data->ray_right;
 
     double xsteps_h;
 	double ysteps_h;
@@ -226,22 +221,19 @@ void cast(t_cube *data, float ray_angle)
 	double yintercept_h;
     
     yintercept_h = floor(data->pixel_y / 32) * 32;
-    if (ray_angle < M_PI) 
+    if (data->ray_down)
         yintercept_h += 32;
     xintercept_h = data->pixel_x + (yintercept_h - data->pixel_y) / tan(ray_angle);
     
     ysteps_h = 32;
-    if (ray_angle > M_PI)
-        ysteps_h = -32;
+    if (data->ray_up)
+        ysteps_h *= -1;
         
     xsteps_h = 32 / tan(ray_angle);
     
-	if (ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2) 
-    	xsteps_h = -fabs(xsteps_h);
-    else
-	{
-    	xsteps_h = fabs(xsteps_h);
-	}
+	if (data->ray_left && xsteps_h > 0 || data->ray_right && xsteps_h < 0) 
+    	xsteps_h *= -1;
+
     
 	//====== check hit wall hor
 	double check_x = 0;
@@ -250,36 +242,30 @@ void cast(t_cube *data, float ray_angle)
 	double next_x_h = xintercept_h;
     double next_y_h = yintercept_h;
 	int found_wall_h = 0;
+    char horizontal_content = 0;
 
-    if(data->ray_up)
-    {
-        printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
-        next_y_h--;
-    }
+    // if(data->ray_up)
+    //     next_y_h--;
 
     while (!found_wall_h)
 	{
+        // if (data->ray_up)
+		//     check_y = next_y_h - 1;
+        // else
+            check_y = next_y_h;
 		check_x = next_x_h;
-		if (ray_angle > M_PI) 
-			check_y = next_y_h - 1;
-		else 
-			check_y = next_y_h;
         if (hit_wall(data, check_x, check_y))
 		{
             xintercept_h = next_x_h;
             yintercept_h = next_y_h;
+            horizontal_content = data->map[(int)floor(check_x / 32)][(int)floor(check_y / 32)];
             found_wall_h = 1;
+            break;
         } 
 		else 
 		{
             next_x_h += xsteps_h;
             next_y_h += ysteps_h;
-            if (next_x_h < 0 || next_x_h >= data->map_dim[0] * 32 || next_y_h < 0 || next_y_h >= data->map_dim[1] * 32) 
-			{
-                found_wall_h = 1;
-                xintercept_h = next_x_h;
-                yintercept_h = next_y_h;
-            }
 		}
 
     }
@@ -293,58 +279,48 @@ void cast(t_cube *data, float ray_angle)
     
 
     xintercept_v = floor(data->pixel_x / 32) * 32;
-    if (ray_angle < M_PI_2 || ray_angle > 3 * M_PI_2) 
+    if (data->ray_right) 
         xintercept_v += 32;
 
     yintercept_v = data->pixel_y + (xintercept_v - data->pixel_x) * tan(ray_angle);
     
 	//============= steps
     xsteps_v = 32;
-    if (ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2) 
-        xsteps_v = -32;
+   if (data->ray_left)
+        xsteps_v *= -1;
         
     ysteps_v = 32 * tan(ray_angle);
-    if (ray_angle > M_PI && ysteps_v < 0)
-        ysteps_v = -fabs(ysteps_v);
-    else
-	{
-        ysteps_v = fabs(ysteps_v);
-	}
+    if ((data->ray_up && ysteps_v > 0) || (data->ray_down && ysteps_v < 0))
+        ysteps_v *= -1;
+    
 	//====== check hit wall ver
 	check_x = 0;
 	check_y = 0;
 	double next_x_v = xintercept_v;
     double next_y_v = yintercept_v;
 	int found_wall_v = 0;
+    char vertical_content = 0;
 
-    if(data->ray_left)
-    {
-        next_x_v--;
-    }
+    // if(data->ray_left)
+    //     next_x_v--;
+
     while (!found_wall_v) 
 	{
-		if (ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2)
+		if (data->ray_left)
 			check_x = next_x_v - 1;
 		else 
 			check_x = next_x_v;
+        // check_x = next_x_v;
 		check_y = next_y_v;
         if (hit_wall(data, check_x, check_y)) 
 		{
             xintercept_v = next_x_v;
             yintercept_v = next_y_v;
+            vertical_content = data->map[(int)floor(check_x / 32)][(int)floor(check_y / 32)];
             found_wall_v = 1;
         } 
-		else 
-		{
-            next_x_v += xsteps_v;
-            next_y_v += ysteps_v;
-            if (next_x_v < 0 || next_x_v >= data->map_dim[0] * 32 || next_y_v < 0 || next_y_v >= data->map_dim[1] * 32) 
-				{
-                found_wall_v = 1;
-                xintercept_v = next_x_v;
-                yintercept_v = next_y_v;
-            }
-		}
+        next_x_v += xsteps_v;
+        next_y_v += ysteps_v;
     }
     // xintercept_v -= 1;
 	// == calcul distance 
@@ -383,11 +359,11 @@ void cast_all_rays(t_cube *data)
     while(ray_id < data->num_of_rays)
     {   
         ray_angle = normalize_angle(ray_angle);
-		if (ray_id == data->num_of_rays / 2)
-		{
+		// if (ray_id == data->num_of_rays / 2)
+		// {
        		cast(data, ray_angle);
         	draw_ray(data, ray_angle, data->closest_dis);
-		}
+		// }
         
         ray_angle += data->fov / data->num_of_rays;
         ray_id++;
@@ -522,7 +498,7 @@ void player_pos(t_cube *data)
     data->rotation_angle = M_PI / 2;
     data->rotation_speed = 2 * (M_PI / 180);
     data->fov = 60 * (M_PI / 180);
-    data->num_of_rays = data->map_dim[0] * 3;
+    data->num_of_rays = data->map_dim[0] * 7;
     
     while (i < data->map_dim[1])
     {
