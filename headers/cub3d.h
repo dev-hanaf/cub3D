@@ -25,6 +25,17 @@
 //# include "/home/fafouri/Desktop/cub3D/includes/get_next_line/get_next_line.h"
 # include "../includes/get_next_line/get_next_line.h"
 
+typedef struct s_ray
+{
+	int 		*ray;
+	double		ray_angle;
+	double		distance;
+	double		wallhitx;
+	double		wallhity;
+	int		flag;
+}	t_ray;
+
+
 typedef struct s_cube
 {
     void	*mlx;
@@ -46,8 +57,8 @@ typedef struct s_cube
 	int		walkdireciton;
 	float		rotation_speed;
 	int 	radius;
-	float		rotation_angle;
-	float	fov;
+	double		rotation_angle;
+	double	fov;
 	double 		closest_dis;
 	int		num_of_rays;
 	int		wall_strip_width;
@@ -55,8 +66,12 @@ typedef struct s_cube
 	int		ray_down;
 	int		ray_left;
 	int		ray_right;
+	int		*ray;
+	double sfactor;
+	double ray_angle;
     int tile_x;
     int tile_y;
+	t_ray *rays;
 } t_cube;
 
 typedef struct s_player
@@ -70,12 +85,6 @@ typedef struct s_player
 	int		u_d;
 }	t_player;
 
-typedef struct s_ray
-{
-	double	ray_ngl;
-	double	distance;
-	int		flag;
-}	t_ray;
 
 // struct player
 // {

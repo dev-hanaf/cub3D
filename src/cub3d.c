@@ -85,6 +85,24 @@ void	my_mlx_pixel_put(t_cube *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
+void fill_square_3d(t_cube *data, int start_x, int start_y, int color)
+{
+    int x;
+    int y;
+
+    y = 0;
+    while (y < 32)
+    {
+        x = 0;
+        while (x < 32)
+        {
+            my_mlx_pixel_put(data, start_x + x,start_y + y , color);
+            x++;
+        }
+        y++;
+    }
+}
+
 void fill_square_32(t_cube *data, int start_x, int start_y, int color)
 {
     int x;
@@ -96,7 +114,7 @@ void fill_square_32(t_cube *data, int start_x, int start_y, int color)
         x = 0;
         while (x < 32)
         {
-            my_mlx_pixel_put(data, start_x + x, start_y + y, color);
+            my_mlx_pixel_put(data, data->sfactor * (start_x + x), data->sfactor * (start_y + y), color);
             x++;
         }
         y++;
@@ -114,25 +132,12 @@ void fill_player_square(t_cube *data, int start_x, int start_y, int color)
         x = 0;
         while (x < 8)
         {
-            my_mlx_pixel_put(data, start_x + x, start_y + y, color);
+            my_mlx_pixel_put(data, data->sfactor * (start_x + x), data->sfactor * (start_y + y), color);
             x++;
         }
         y++;
     }
 }
-
-// int hit_wall(t_cube *data, double x, double y)
-// {
-// 	double tile_x = x / 32;
-// 	double tile_y = y / 32;
-
-// 	 if (tile_x < 0 || tile_x >= data->map_dim[0] || 
-//         tile_y < 0 || tile_y >= data->map_dim[1])
-//         return 1; 
-        
-//     return (data->map[tile_y][tile_x] == '1');
-// }
-
 
 int hit_wall(t_cube *data, double x, double y)
 {
@@ -158,7 +163,7 @@ int is_wall(t_cube *data, int x, int y)
     return (data->map[tile_y][tile_x] == '1');
 }
 
-void draw_ray(t_cube *data, float ray_angle, int ray_length)
+void draw_ray(t_cube *data)
 {
     int i = 0;
     double start_x = data->pixel_x + 4;
@@ -171,23 +176,72 @@ void draw_ray(t_cube *data, float ray_angle, int ray_length)
 
     double steps = fmax(fabs(dx), fabs(dy));
    
-    printf("ray_lenght = %d | distance = %f\n", ray_length ,steps);
+    // printf("ray_lenght = %d | distance = %f\n", ray_length ,steps);
 
     dx /= steps;
     dy /= steps;
     
     double x = start_x;
     double y = start_y;
-    
+
     while (i <= steps && !hit_wall(data, x, y))
     {
-        my_mlx_pixel_put(data, round(x), round(y), 0xFFFFFFFF);
+        my_mlx_pixel_put(data, round(data->sfactor * x), round(data->sfactor * y), 0xFFFFFFFF);
         x += dx;
         y += dy;
         i++;
     }
 }
 
+void wall_projection(t_cube *data)
+{
+    int ray_id = 0;
+    double ray_distance = 0;
+    double wallheight;
+    int window_width = data->map_dim[0] * 32;
+    int window_height = data->map_dim[1] * 32;
+    
+    int x = 0;
+    int y = 0;
+    while (y < window_height)
+    {
+        x = 0;
+        while (x < window_width)
+        {
+            my_mlx_pixel_put(data, x, y, 0x808080);
+            x++;
+        }
+        y++;
+    }
+
+    while(ray_id < data->num_of_rays)
+    {
+        ray_distance = data->rays[ray_id].distance * cos(data->rays[ray_id].ray_angle - data->rotation_angle);
+        
+        double disprojection = (window_width / 2) / tan(data->fov / 2);
+        wallheight = (32 / ray_distance) * disprojection;
+        
+        int wall_top = (window_height / 2) - (wallheight / 2);
+        if (wall_top < 0)
+            wall_top = 0;
+
+        int wall_bottom = (window_height / 2) + (wallheight / 2);
+        if (wall_bottom >= window_height)
+            wall_bottom = window_height - 1;
+        x = ray_id;
+        y = wall_top;
+        while (y <= wall_bottom)
+        {
+            my_mlx_pixel_put(data, x, y, 0x0000FF);
+            y++;
+        }
+        ray_id++;
+    }
+}
+
+//=====**
+
+//=====***
 
 double normalize_angle(double angle)
 {
@@ -204,9 +258,17 @@ int check_move(t_cube *data, int new_x, int new_y)
            !is_wall(data, new_x + 8 - 1, new_y + 8 - 1);
 }
 
-void cast(t_cube *data, float ray_angle) 
+
+void cast(t_cube *data, float ray_angle, t_ray *current_ray) 
 {
     ray_angle = normalize_angle(ray_angle);
+     if (!current_ray)
+        return;
+        
+    ray_angle = normalize_angle(ray_angle);
+    current_ray->ray_angle = ray_angle;
+    // data->ray_angle = ray_angle;
+
     // Horizontal intersection
 
     data->ray_up = ray_angle > M_PI;
@@ -231,7 +293,7 @@ void cast(t_cube *data, float ray_angle)
         
     xsteps_h = 32 / tan(ray_angle);
     
-	if (data->ray_left && xsteps_h > 0 || data->ray_right && xsteps_h < 0) 
+	if ((data->ray_left && xsteps_h > 0) || (data->ray_right && xsteps_h < 0)) 
     	xsteps_h *= -1;
 
     
@@ -242,7 +304,6 @@ void cast(t_cube *data, float ray_angle)
 	double next_x_h = xintercept_h;
     double next_y_h = yintercept_h;
 	int found_wall_h = 0;
-    char horizontal_content = 0;
 
     // if(data->ray_up)
     //     next_y_h--;
@@ -258,7 +319,7 @@ void cast(t_cube *data, float ray_angle)
 		{
             xintercept_h = next_x_h;
             yintercept_h = next_y_h;
-            horizontal_content = data->map[(int)floor(check_x / 32)][(int)floor(check_y / 32)];
+            // horizontal_content = data->map[(int)floor(check_x / 32)][(int)floor(check_y / 32)];
             found_wall_h = 1;
             break;
         } 
@@ -269,7 +330,7 @@ void cast(t_cube *data, float ray_angle)
 		}
 
     }
-    
+
     // Vertical intersection 
     double xsteps_v;
 	double ysteps_v;
@@ -291,15 +352,15 @@ void cast(t_cube *data, float ray_angle)
         
     ysteps_v = 32 * tan(ray_angle);
     if ((data->ray_up && ysteps_v > 0) || (data->ray_down && ysteps_v < 0))
+    {
         ysteps_v *= -1;
-    
-	//====== check hit wall ver
+    }
+    //====== check hit wall ver
 	check_x = 0;
 	check_y = 0;
 	double next_x_v = xintercept_v;
     double next_y_v = yintercept_v;
 	int found_wall_v = 0;
-    char vertical_content = 0;
 
     // if(data->ray_left)
     //     next_x_v--;
@@ -316,7 +377,7 @@ void cast(t_cube *data, float ray_angle)
 		{
             xintercept_v = next_x_v;
             yintercept_v = next_y_v;
-            vertical_content = data->map[(int)floor(check_x / 32)][(int)floor(check_y / 32)];
+            // vertical_content = data->map[(int)floor(check_x / 32)][(int)floor(check_y / 32)];
             found_wall_v = 1;
         } 
         next_x_v += xsteps_v;
@@ -332,43 +393,89 @@ void cast(t_cube *data, float ray_angle)
     double dy_v = yintercept_v - data->pixel_y;
     double distance_v = sqrt(dx_v * dx_v + dy_v * dy_v);
     
-    if (distance_h < distance_v) 
-	{
+   if (distance_h < distance_v) 
+    {
         data->closest_dis = distance_h;
         data->wallhitx = xintercept_h;
         data->wallhity = yintercept_h;
+
+        current_ray->distance = distance_h;
+        current_ray->wallhitx = xintercept_h;
+        current_ray->wallhity = yintercept_h;
         printf("\nHORIZONTAL x = %f, y = %f\n", xintercept_h, yintercept_h);
     } 
-	else 
-	{
+    else 
+    {
         data->closest_dis = distance_v;
         data->wallhitx = xintercept_v;
         data->wallhity = yintercept_v;
+
+        current_ray->distance = distance_v;
+        current_ray->wallhitx = xintercept_v;
+        current_ray->wallhity = yintercept_v;
         printf("\nVERTICAL x = %f, y = %f\n", xintercept_v, yintercept_v);
     }
 }
 
+void init_rays(t_cube *data)
+{
+    int i = 0;
+    data->rays = malloc(sizeof(t_ray) * data->num_of_rays);
+    if (!data->rays)
+        return;
+
+    while (i < data->num_of_rays)
+    {
+        data->rays[i].ray = NULL;
+        data->rays[i].ray_angle = 0;
+        data->rays[i].distance = 0;
+        data->rays[i].wallhitx = 0;
+        data->rays[i].wallhity = 0;
+        data->rays[i].flag = 0;
+        i++;
+    }
+}
 
 void cast_all_rays(t_cube *data)
 {
-    int ray_id = 0;
-    float ray_angle = data->rotation_angle - (data->fov / 2);
-	data->wallhitx = 0;
-	data->wallhity = 0;
+    double ray_id = 0;
+    double ray_increment = data->fov / (data->map_dim[0] * 32);
+    double ray_angle = data->rotation_angle - (data->fov / 2);
+    
+    data->wallhitx = 0;
+    data->wallhity = 0;
+    
+    if (!data->rays)
+        init_rays(data);
     
     while(ray_id < data->num_of_rays)
     {   
         ray_angle = normalize_angle(ray_angle);
-		// if (ray_id == data->num_of_rays / 2)
-		// {
-       		cast(data, ray_angle);
-        	draw_ray(data, ray_angle, data->closest_dis);
-		// }
-        
-        ray_angle += data->fov / data->num_of_rays;
-        ray_id++;
+        cast(data, ray_angle, &data->rays[(int)ray_id]);
+        draw_ray(data);
+        ray_angle += ray_increment;
+        ray_id += 1;
     }
 }
+// void cast_all_rays(t_cube *data)
+// {
+//     double ray_id = 0;
+//     double ray_angle = data->rotation_angle - (data->fov / 2);
+//     data->wallhitx = 0;
+//     data->wallhity = 0;
+    
+//     if (!data->rays)
+//         init_rays(data);
+    
+//     while(ray_id < data->num_of_rays)
+//     {   
+//         ray_angle = normalize_angle(ray_angle);
+//         cast(data, ray_angle, &data->rays[(int)ray_id]);
+//         draw_ray(data);
+//         ray_angle += data->fov / data->num_of_rays;
+//         ray_id += 1;
+//     }
+// }
 
 void move_player(t_cube *data, int move_direction)
 {
@@ -386,11 +493,14 @@ void move_player(t_cube *data, int move_direction)
         cast_all_rays(data);
         fill_player_square(data, data->pixel_x, data->pixel_y, 0x00000000);
         draw_grid_lines(data);
+        wall_projection(data);
         mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
     }
 }
 
+//======
 
+//====
 int key_code(int keycode, t_cube *data)
 {
     mlx_clear_window(data->mlx, data->mlx_win);
@@ -434,9 +544,9 @@ void draw_line(t_cube *data, int x, int y, int length, int is_horizontal)
     while (i < length)
     {
         if (is_horizontal)
-            my_mlx_pixel_put(data, x + i, y, 0x000000FF); 
+            my_mlx_pixel_put(data, data->sfactor * (x + i),data->sfactor * y, 0x000000FF); 
         else
-            my_mlx_pixel_put(data, x, y + i, 0x000000FF);
+            my_mlx_pixel_put(data, data->sfactor * x, data->sfactor * (y + i), 0x000000FF);
         i++;
     }
 }
@@ -486,6 +596,7 @@ void fill_map(t_cube *data)
     fill_player_square(data, data->pixel_x, data->pixel_y, 0x00000000);
     draw_grid_lines(data);
     cast_all_rays(data);
+    wall_projection(data);
     mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 }
 
@@ -495,11 +606,11 @@ void player_pos(t_cube *data)
     int j = 0;
     data->tile_x = 0;
     data->tile_y = 0;
+    data->sfactor = 0.2;
     data->rotation_angle = M_PI / 2;
     data->rotation_speed = 2 * (M_PI / 180);
     data->fov = 60 * (M_PI / 180);
-    data->num_of_rays = data->map_dim[0] * 7;
-    
+    data->num_of_rays = data->map_dim[0] * 32;
     while (i < data->map_dim[1])
     {
         j = 0;
