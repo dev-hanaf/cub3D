@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:51:07 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/08 03:52:11 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 04:23:16 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,34 @@ void	validate_and_set_map_dimensions(t_cube *data, int *i)
 {
 	size_t	h;
 	size_t	w;
-
+	size_t counter;
+	int   xxxxxxx = 0;
+	
+	counter = 0;
 	h = *i;
 	w = 0;
-	if (check_directions_colors(data, NULL, 0) != 6)
+	if (check_directions_colors(data, NULL) != 6)
+	{
+		while (xxxxxxx <= data->idx)
+		{
+			free(data->object[xxxxxxx].key);
+			free(data->object[xxxxxxx].value);
+			xxxxxxx++;
+		}
+		free(data->object);
 		write_errors(data, MISSED);
+	}
 	data->textures->map = 1;
 	while (data->map[*i])
 	{
-		if (ft_strlen(data->map[*i]) > w)
+		if (data->map[*i] && data->map[*i][0] == 10)
+			counter++;
+		else if (ft_strlen(data->map[*i]) > w)
 			w = ft_strlen(data->map[*i]) - 1;
 		(*i)++;
 	}
-	h = *i - h;
+	
+	h = (*i - counter) - h ;
 	data->height = h;
 	data->width = w;
 }
@@ -67,6 +82,11 @@ void	allocate_and_copy_map(t_cube *data, int tmp_i)
 	i = tmp_i;
 	while (data->map[i])
 	{
+		if (data->map[i] && data->map[i][0] == 10)
+		{
+			i++;
+			continue;
+		}
 		map[j] = malloc(sizeof(char) * (data->width + 1));
 		if (map[j] == NULL)
 			write_errors(data, FAILED_ALLOCATION);

@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 06:34:27 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/08 03:56:57 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 03:11:01 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	map_elements(t_cube *data, char c)
 {
 	if (c == '1' || c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W'
-		|| c == ' ')
+		|| white_spaces(c))
 		return ;
 	write_errors(data, INVALID_ELEMENT);
 }

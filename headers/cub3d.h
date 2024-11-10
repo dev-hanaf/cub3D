@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/08 04:09:57 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 05:59:35 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ typedef struct s_map_data
 typedef struct s_cube
 {
 	int			idx;
+	int			*floor;
+	int			*ciel;
 	void		*mlx;
 	void		*mlx_win;
 	size_t		height;
@@ -79,14 +81,15 @@ void			parse_map(t_cube *data);
 char			*copy(char *dest, char *src, unsigned int n);
 void			validate_and_set_map_dimensions(t_cube *data, int *i);
 void			allocate_and_copy_map(t_cube *data, int tmp_i);
-int				check_directions_colors(t_cube *data, char *key, int idx);
-void			directions_colors(t_cube *data, char *key, int idx);
+int				check_directions_colors(t_cube *data, char **key);
+void			directions_colors(t_cube *data, char **key);
 void			initialize_game_resources(t_cube *data, int *i, int *idx);
 void			set_object(t_cube *data, int *i);
 bool			get_key(t_cube *data, int i, int *z, char **key);
 void			get_value(t_cube *data, int i, int *z, char **value);
 
 /********************** utils ******************************** */
+char			**split_whitespaces(char *str, char *seps);
 void			write_errors(t_cube *data, t_status status);
 void			display_map(t_cube *data);
 void			free_all(t_cube *data);

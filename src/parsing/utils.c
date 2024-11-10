@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:48:41 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/08 03:55:35 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 06:17:27 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ void	free_all(t_cube *data)
 		}
 		if (data->textures)
 			free(data->textures);
+		if (data->floor)
+			free(data->floor);
+		if (data->ciel)
+			free(data->ciel);
 	}
 }
 
