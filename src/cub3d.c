@@ -310,9 +310,9 @@ void cast(t_cube *data, float ray_angle, t_ray *current_ray)
 
     while (!found_wall_h)
 	{
-        // if (data->ray_up)
-		//     check_y = next_y_h - 1;
-        // else
+        if (data->ray_up)
+		    check_y = next_y_h - 1;
+        else
             check_y = next_y_h;
 		check_x = next_x_h;
         if (hit_wall(data, check_x, check_y))
@@ -490,9 +490,9 @@ void move_player(t_cube *data, int move_direction)
         data->pixel_y = new_y;
         data->tile_x = data->pixel_x / 32;
         data->tile_y = data->pixel_y / 32;
-        cast_all_rays(data);
         fill_player_square(data, data->pixel_x, data->pixel_y, 0x00000000);
         draw_grid_lines(data);
+        cast_all_rays(data);
         wall_projection(data);
         mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
     }
@@ -606,7 +606,7 @@ void player_pos(t_cube *data)
     int j = 0;
     data->tile_x = 0;
     data->tile_y = 0;
-    data->sfactor = 0.2;
+    data->sfactor = 0.1;
     data->rotation_angle = M_PI / 2;
     data->rotation_speed = 2 * (M_PI / 180);
     data->fov = 60 * (M_PI / 180);
