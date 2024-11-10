@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:48:41 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 06:17:27 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 06:51:09 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	write_errors(t_cube *data, t_status status)
 		dprintf(2, "Error: invalid position\n");
 	else if (status == PLAYERS)
 		dprintf(2, "Error: invalid player number\n");
+	else if (NO_TEXTURE_FOUND)
+			dprintf(2, "in direction_colors no texture found\n");
 	free_all(data);
 	exit(EXIT_FAILURE);
 }

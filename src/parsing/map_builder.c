@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:51:07 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 04:23:16 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 06:54:14 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,25 +33,19 @@ char	*copy(char *dest, char *src, unsigned int n)
 	return (dest);
 }
 
+
 void	validate_and_set_map_dimensions(t_cube *data, int *i)
 {
 	size_t	h;
 	size_t	w;
 	size_t counter;
-	int   xxxxxxx = 0;
 	
 	counter = 0;
 	h = *i;
 	w = 0;
 	if (check_directions_colors(data, NULL) != 6)
 	{
-		while (xxxxxxx <= data->idx)
-		{
-			free(data->object[xxxxxxx].key);
-			free(data->object[xxxxxxx].value);
-			xxxxxxx++;
-		}
-		free(data->object);
+		data->textures->map = 1;
 		write_errors(data, MISSED);
 	}
 	data->textures->map = 1;
@@ -63,7 +57,6 @@ void	validate_and_set_map_dimensions(t_cube *data, int *i)
 			w = ft_strlen(data->map[*i]) - 1;
 		(*i)++;
 	}
-	
 	h = (*i - counter) - h ;
 	data->height = h;
 	data->width = w;

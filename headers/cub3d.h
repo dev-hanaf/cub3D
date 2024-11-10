@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 05:59:35 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 07:08:42 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ typedef enum e_status
 	MISSED,
 	INVALID_ELEMENT,
 	BAD_POSITION,
-	PLAYERS
+	PLAYERS,
+	NO_TEXTURE_FOUND
 }				t_status;
 
 typedef struct s_textures
@@ -87,7 +88,7 @@ void			initialize_game_resources(t_cube *data, int *i, int *idx);
 void			set_object(t_cube *data, int *i);
 bool			get_key(t_cube *data, int i, int *z, char **key);
 void			get_value(t_cube *data, int i, int *z, char **value);
-
+void 			parse_rgb(t_cube *data);
 /********************** utils ******************************** */
 char			**split_whitespaces(char *str, char *seps);
 void			write_errors(t_cube *data, t_status status);
@@ -97,7 +98,8 @@ void			lines_lenght(int fd, int *i);
 bool			white_spaces(char c);
 void			ft_strcpy(char *dst, char c);
 void			free_map(t_cube *data);
-
+int 			ft_strlen_2d_array(char **str);
+void 			free_splite(char **str);
 void			to_remove_function(t_cube *data);
 
 #endif

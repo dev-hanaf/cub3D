@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 04:13:53 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 06:28:51 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 07:17:28 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	main(int ac, char **av)
 {
 	t_cube	data;
 
-	
 	ft_memset(&data, 0, sizeof(t_cube));
 
 	data.map = NULL;

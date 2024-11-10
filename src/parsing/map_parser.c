@@ -6,11 +6,27 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 02:06:43 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 05:31:24 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 07:09:08 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+
+void free_object_by_idx(t_cube *data, char **key)
+{
+	int i;
+
+	i = 0;
+	free(*key);
+	while (i < data->idx)
+	{
+		free(data->object[i].key);
+		free(data->object[i].value);
+		i++;
+	}
+	free(data->object);
+}
 
 int	check_directions_colors(t_cube *data, char **key)
 {
@@ -27,14 +43,7 @@ int	check_directions_colors(t_cube *data, char **key)
 		flag = true;
 	if (flag)
 	{
-		free(*key);
-		while (i < data->idx)
-		{
-			free(data->object[i].key);
-			free(data->object[i].value);
-			i++;
-		}
-		free(data->object);
+		free_object_by_idx(data, key);
 		write_errors(data, DUPLICATE);
 	}
 	i = p->c + p->f + p->ea + p->no + p->so + p->we;
@@ -57,10 +66,11 @@ void	init_texture_maps(char *keys[6], int **keys_lower, t_cube *data)
 	keys_lower[5] = &data->textures->c;
 }
 
+
+
 void	directions_colors(t_cube *data, char **key)
 {
 	int		i;
-	int		 xxxxxxx = 0;
 	char	*keys[6];
 	int		*keys_lower[6];
 
@@ -77,17 +87,8 @@ void	directions_colors(t_cube *data, char **key)
 		}
 		else if (i == 5)
 		{
-			free(*key);
-			while (xxxxxxx < data->idx)
-			{
-				free(data->object[xxxxxxx].key);
-				free(data->object[xxxxxxx].value);
-				xxxxxxx++;
-			}
-			free(data->object);
-			free_all(data);
-			dprintf(2, "in direction_colors no texture found\n");
-			exit(EXIT_FAILURE);
+			free_object_by_idx(data, key);
+			write_errors(data, NO_TEXTURE_FOUND);
 		}
 		i++;
 	}

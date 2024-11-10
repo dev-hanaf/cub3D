@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:54:58 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/08 04:14:58 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/10 07:07:37 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,24 @@ void	free_map(t_cube *data)
 	while (data->map && data->map[i])
 		free(data->map[i++]);
 	free(data->map);
+}
+
+int ft_strlen_2d_array(char **str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+void free_splite(char **str)
+{
+	int i;
+
+	i = 0;
+	while (str && str[i])
+		free(str[i++]);
+	free(str);
 }
