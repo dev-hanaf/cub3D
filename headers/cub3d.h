@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/10/16 15:41:44 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/11 05:47:57 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,31 @@ typedef struct s_ray
 	int		flag;
 }	t_ray;
 
+typedef struct s_cast
+{
+	double	xsteps_h;
+	double	ysteps_h;
+	double	xintercept_h;
+	double	yintercept_h;
+	double	check_x;
+	double	check_y;
+	double	next_x_h;
+	double	next_y_h;
+	int		found_wall_h;
+	double	xsteps_v;
+	double	ysteps_v;
+	double	xintercept_v;
+	double	yintercept_v;
+	double	next_x_v;
+	double	next_y_v;
+	int		found_wall_v;
+	double	dx_h;
+	double	dy_h;
+	double	distance_h;
+	double	dx_v;
+	double	dy_v;
+	double	distance_v;
+}	t_cast;
 
 typedef struct s_cube
 {
@@ -74,34 +99,54 @@ typedef struct s_cube
 	t_ray *rays;
 } t_cube;
 
-typedef struct s_player
-{
-	int		plyr_x;
-	int		plyr_y;
-	double	angle;
-	float	fov_rd;
-	int		rot;
-	int		l_r;
-	int		u_d;
-}	t_player;
-
-
-// struct player
-// {
-//     float x;
-//     float y;
-//     int walkdirection;
-//     int turndirection;
-//     float walkspeed;
-    
-// }
-// struct Ray
-// {
-    
-// }
-
 void	fill_map(t_cube *data);
-void draw_line(t_cube *data, int x, int y, int length, int is_horizontal);
-void draw_grid_lines(t_cube *data);
+
+//== Draw
+
+int		hit_wall(t_cube *data, double x, double y);
+void	my_mlx_pixel_put(t_cube *data, int x, int y, int color);
+void	draw_line(t_cube *data, int x, int y, int length, int is_horizontal);
+void	draw_grid_lines(t_cube *data);
+void	draw_ray(t_cube *data);
+
+//== find hits
+
+void	horizontal_hit(t_cast *cast, t_cube *data);
+void	find_hor_hit(t_cast *cast, t_cube *data);
+void	vertical_hit(t_cast *cast, t_cube *data);
+void	find_ver_hit(t_cast *cast, t_cube *data);
+
+//== raycasting
+
+void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray);
+void	cast(t_cube *data, t_ray *current_ray);
+void	init_rays(t_cube *data);
+void	cast_all_rays(t_cube *data);
+double	normalize_angle(double angle);
+
+//=== moves
+
+int	check_move(t_cube *data, double new_x, double new_y);
+void	move_player(t_cube *data, double new_x, double new_y);
+int	key_code(int keycode, t_cube *data);
+
+// fill map
+
+void	fill_square_32(t_cube *data, int start_x, int start_y, int color);
+void	fill_player_square(t_cube *data, int start_x, int start_y, int color);
+void	fill_map(t_cube *data);
+void	player_pos(t_cube *data);
+
+// init_var
+
+int	ft_close(t_cube *cube);
+int	is_wall(t_cube *data, int x, int y);
+void    init_var(t_cube *data);
+
+// wall projection 
+
+void	wall_projection(t_cube *data);
+
+
 
 #endif
