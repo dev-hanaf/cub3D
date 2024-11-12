@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 04:13:53 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/12 02:44:17 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/12 03:55:01 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,11 +130,27 @@ int	main(int ac, char **av)
 	init(av[1], &data);
 	data.mlx = mlx_init();
 	if (data.mlx == NULL)
+	{
+		//TODO free data
 		return (1);
+	}
 	check_textures(&data);
-	data.mlx_win = mlx_new_window(data.mlx, 1920, 1080, "Hello world!");
-	if (data.mlx_win == NULL)
-		return (free(data.mlx), 1);
+	data.mlx_win = mlx_new_window(data.mlx, data.width * 32,
+			data.height * 32, "cub3d");
+	if (!data.mlx_win)
+	{
+		// TODO free mlx and data;
+		return (1);
+	}
+	data.img = mlx_new_image(data.mlx, data.width * 32, data.height
+			* 32);
+	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel,
+			&data.line_length, &data.endian);
+	init_var(&data);
+	player_pos(&data);
+	fill_map(&data);
+	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
+	mlx_hook(data.mlx_win, 02, 1L << 0, key_code, &data);
 	mlx_hook(data.mlx_win, 17, 1L << 0, ft_close, &data);
 	mlx_loop(data.mlx);
 	free_all(&data);

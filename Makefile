@@ -3,9 +3,9 @@ CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 AR = ar rcs
 
 LIBFT = ./includes/libft
-MLX = -lmlx_Linux -lXext -lX11
+MLX = -lmlx_Linux -lXext -lX11 -lm
 
-SRC = $(wildcard src/*.c)  $(wildcard src/*/*.c)
+SRC = $(wildcard src/*.c)  $(wildcard src/*/*.c) 
 
 
 OBJ = $(SRC:.c=.o)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_builder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:51:07 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 06:54:14 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/12 03:26:35 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	*copy(char *dest, char *src, unsigned int n)
 
 void	validate_and_set_map_dimensions(t_cube *data, int *i)
 {
-	size_t	h;
-	size_t	w;
-	size_t counter;
+	int	h;
+	int	w;
+	int counter;
 	
 	counter = 0;
 	h = *i;
@@ -53,7 +53,7 @@ void	validate_and_set_map_dimensions(t_cube *data, int *i)
 	{
 		if (data->map[*i] && data->map[*i][0] == 10)
 			counter++;
-		else if (ft_strlen(data->map[*i]) > w)
+		else if ((int) ft_strlen(data->map[*i]) > w)
 			w = ft_strlen(data->map[*i]) - 1;
 		(*i)++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:54:58 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 07:07:37 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/12 03:57:55 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,11 @@ void free_splite(char **str)
 	while (str && str[i])
 		free(str[i++]);
 	free(str);
+}
+
+bool is_player(char c)
+{
+	if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
+		return (true);
+	return (false);
 }
