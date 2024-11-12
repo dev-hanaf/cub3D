@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:39:27 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/11 05:50:52 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/12 02:54:19 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 
 int	check_move(t_cube *data, double new_x, double new_y)
 {
+
+
+    if (new_x < 32 + 1 || new_x >= (data->map_dim[0] * 32) - 1 || 
+        new_y < 32 + 1 || new_y >= (data->map_dim[1] * 32) - 1)
+    {
+        return (0);
+    }
 	return (!hit_wall(data, new_x, new_y) && !hit_wall(data, new_x + 8 - 1,
 			new_y) && !hit_wall(data, new_x, new_y + 8 - 1) && !hit_wall(data,
 			new_x + 8 - 1, new_y + 8 - 1));
@@ -23,6 +30,8 @@ void	move_player(t_cube *data, double new_x, double new_y)
 {
 	if (check_move(data, new_x, new_y))
 	{
+		printf("new_x = %f | new_y = %f\n", new_x, new_y);
+		printf("====test\n");
 		mlx_clear_window(data->mlx, data->mlx_win);
 		fill_square_32(data, (data->pixel_x / 32) * 32, (data->pixel_y / 32)
 			* 32, 0x0000FF00);
@@ -33,7 +42,7 @@ void	move_player(t_cube *data, double new_x, double new_y)
 		fill_player_square(data, data->pixel_x, data->pixel_y, 0x00000000);
 		draw_grid_lines(data);
 		cast_all_rays(data);
-		wall_projection(data);
+		// wall_projection(data);
 		mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 	}
 }
@@ -59,15 +68,14 @@ int	key_code(int keycode, t_cube *data)
 	}
 	else if (keycode == 119) // w key
 	{
-		data->turndirection = 1;
-		new_x = data->pixel_x + 2 * cos(data->rotation_angle) * 3;
-		new_y = data->pixel_y + 2 * sin(data->rotation_angle) * 3;
+		new_x = data->pixel_x + 1 * cos(data->rotation_angle) * 3;
+		new_y = data->pixel_y + 1 * sin(data->rotation_angle) * 3;
 		move_player(data, new_x, new_y);
 	}
 	else if (keycode == 115) // s key
 	{
-		new_x = data->pixel_x - 2 * cos(data->rotation_angle) * 3;
-		new_y = data->pixel_y - 2 * sin(data->rotation_angle) * 3;
+		new_x = data->pixel_x - 1 * cos(data->rotation_angle) * 3;
+		new_y = data->pixel_y - 1 * sin(data->rotation_angle) * 3;
 		move_player(data, new_x, new_y);
 	}
 	else if (keycode == 65363) // right arrow

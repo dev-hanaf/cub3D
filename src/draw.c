@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:30:32 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/11 05:32:10 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/12 02:23:07 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@ int	hit_wall(t_cube *data, double x, double y)
 
 	tile_x = floor(x / 32);
 	tile_y = floor(y / 32);
+	// printf("bounds: x=%d, y=%d\n", tile_x, tile_y);
+	// if (tile_x <= 0 || tile_x  >= data->map_dim[0] * 32 || 
+    //     tile_y <= 0 || tile_y  >= data->map_dim[1] * 32)
+    // {
+    //     return (0);
+    // }
 	if (tile_x < 0 || tile_x >= data->map_dim[0] || tile_y < 0
 		|| tile_y >= data->map_dim[1])
 		return (1);
@@ -27,6 +33,9 @@ int	hit_wall(t_cube *data, double x, double y)
 
 void	my_mlx_pixel_put(t_cube *data, int x, int y, int color)
 {
+	//  if (x < 0 || x >= data->map_dim[0] * 32 || 
+    //     y < 0 || y >= data->map_dim[1] * 32)
+    //     return;
 	char	*dst;
 
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
