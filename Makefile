@@ -20,11 +20,10 @@ all:  $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C $(LIBFT)
-	$(CC) $(CFLAGS)  $(OBJ) $(INC)  $(MLX) -o $(NAME)
 	$(CC) $(CFLAGS)  $(OBJ) $(INC) $(MLX)  $(LIBS) -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INC)  -Imlx -c $< -o $@
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
 	@make clean -C $(LIBFT)
