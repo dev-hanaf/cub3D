@@ -1,96 +1,149 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/08 04:13:53 by ahanaf            #+#    #+#             */
+/*   Updated: 2024/11/12 03:55:01 by hfafouri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-int	read_line(char *av)
+void	to_remove_function(t_cube *data)
 {
-	int		fd;
-	int		i;
-	char	*str;
-
-	fd = open(av, O_RDONLY);
-	str = get_next_line(fd);
-	i = 0;
-	while (str)
-	{
-		free(str);
-		str = get_next_line(fd);
-		i++;
-	}
-	return (i);
-}
-
-void	map_loop(t_cube *data, char *str, int fd)
-{
-	int	i;
 	int	j;
 
-	i = 0;
-	while (i < data->map_dim[1] && str != NULL)
-	{
-		j = 0;
-		data->map[i] = (char *)malloc(sizeof(char) * (data->map_dim[0]));
-		while (j < data->map_dim[0])
-		{
-			data->map[i][j] = str[j];
-			j++;
-		}
-		free(str);
-		str = get_next_line(fd);
-		i++;
-	}
-}
-
-void	load_map(char *av, t_cube *data)
-{
-	int		fd;
-	char	*str;
-
-	fd = open(av, O_RDONLY);
-	str = get_next_line(fd);
-	data->map_dim[0] = strlen(str) - 1;
-	map_loop(data, str, fd);
-	close(fd);
-}
-
-void	print_map(t_cube *data)
-{
-	int	i;
-	int	j;
-
-	i = 0;
 	j = 0;
-	while (i < data->map_dim[1])
+	while (data->map[j])
+		printf("|%s|\n", data->map[j++]);
+	j = 0;
+	while (j < 6)
 	{
-		j = 0;
-		while (j < data->map_dim[0])
-		{
-			printf("%c", data->map[i][j]);
-			j++;
-		}
-		printf("\n");
+		printf("key->%s, value->|%s|\n", data->object[j].key,
+			data->object[j].value);
+		j++;
+	}
+}
+
+int	ft_close(t_cube *data)
+{
+	mlx_destroy_image(data->mlx, data->image->south);
+	mlx_destroy_image(data->mlx, data->image->north);
+	mlx_destroy_image(data->mlx, data->image->west);
+	mlx_destroy_image(data->mlx, data->image->east);
+	mlx_destroy_window(data->mlx, data->mlx_win);
+	mlx_destroy_display(data->mlx);
+	free_all(data);
+	free(data->mlx);
+	exit(EXIT_SUCCESS);
+	return (0);
+}
+
+void free_images(t_cube *data)
+{
+	if (data->image->east)
+	{
+		// mlx_destroy_image(data->mlx, data->image->east);
+		free(data->image->east);
+	}
+	if (data->image->west)
+	{
+		// mlx_destroy_image(data->mlx, data->image->west);
+		free(data->image->west);
+	}
+	if (data->image->north)
+	{
+		// mlx_destroy_image(data->mlx, data->image->north);
+		free(data->image->north);
+	}
+	if (data->image->south)
+	{
+		// mlx_destroy_image(data->mlx, data->image->south);
+		free(data->image->south);
+	}
+
+	dprintf(2, "Error : xpm_file_to_image == NULL\n");
+	mlx_destroy_display(data->mlx);
+	free_all(data);
+	free(data->mlx);
+	exit(EXIT_FAILURE);
+}
+void validate_xpm(t_cube *data)
+{
+	
+	if (!data->image->east || !data->image->west || !data->image->south || !data->image->north )
+	{
+		if (data->image->south)
+			mlx_destroy_image(data->mlx, data->image->south);
+		if ( data->image->north)
+			mlx_destroy_image(data->mlx, data->image->north);
+		if (data->image->west)
+			mlx_destroy_image(data->mlx, data->image->west);
+		if (data->image->east)
+			mlx_destroy_image(data->mlx, data->image->east);
+		dprintf(2, "Error : xpm_file_to_image == NULL\n");
+		mlx_destroy_display(data->mlx);
+		free_all(data);
+		free(data->mlx);
+		exit(EXIT_FAILURE);
+	}
+}
+
+void check_textures(t_cube *data)
+{
+	int	width;
+	int height;
+	int i;
+	
+	data->image = malloc(sizeof(t_images));
+	if (!data->image)
+		write_errors(data, FAILED_ALLOCATION);	
+	ft_memset(data->image, 0, sizeof(t_images));
+	width = data->width;
+	height = data->height;
+	i = 0;
+	while(i < 6)
+	{
+		if (data->object[i].key[0] == 'N')
+			data->image->north = mlx_xpm_file_to_image(data->mlx, data->object[i].value, &width, &height);
+		else if (data->object[i].key[0] == 'S')
+			data->image->south = mlx_xpm_file_to_image(data->mlx, data->object[i].value, &width, &height);
+		else if (data->object[i].key[0] == 'E')
+			data->image->east = mlx_xpm_file_to_image(data->mlx, data->object[i].value, &width, &height);
+		else if (data->object[i].key[0] == 'W')
+			data->image->west = mlx_xpm_file_to_image(data->mlx, data->object[i].value, &width, &height);
 		i++;
 	}
+	validate_xpm(data);
 }
 
 int	main(int ac, char **av)
 {
 	t_cube	data;
-
-	if (ac == 1)
-		return (0);
+	
+	ft_memset(&data, 0, sizeof(t_cube));
+	if (ac != 2)
+		write_errors(NULL, BAD_ARGUMENTS);
+	init(av[1], &data);
 	data.mlx = mlx_init();
-	data.map_dim[1] = read_line(av[1]);
-	printf("map_dim[1] = %d\n", data.map_dim[1]);
-	data.map = (char **)malloc(sizeof(char *) * (data.map_dim[1] + 1));
-	if (data.map == NULL)
-		return (0);
-	load_map(av[1], &data);
-	printf("map_dim[0] = %d\n", data.map_dim[0]);
-	data.mlx_win = mlx_new_window(data.mlx, data.map_dim[0] * 32,
-			data.map_dim[1] * 32, "Hello world!");
-	// data.mlx_win = mlx_new_window(data.mlx, 1920 , 1080, "Hello world!");
-	data.img = mlx_new_image(data.mlx, data.map_dim[0] * 32, data.map_dim[1]
+	if (data.mlx == NULL)
+	{
+		//TODO free data
+		return (1);
+	}
+	check_textures(&data);
+	data.mlx_win = mlx_new_window(data.mlx, data.width * 32,
+			data.height * 32, "cub3d");
+	if (!data.mlx_win)
+	{
+		// TODO free mlx and data;
+		return (1);
+	}
+	data.img = mlx_new_image(data.mlx, data.width * 32, data.height
 			* 32);
-	print_map(&data);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel,
 			&data.line_length, &data.endian);
 	init_var(&data);
@@ -100,4 +153,6 @@ int	main(int ac, char **av)
 	mlx_hook(data.mlx_win, 02, 1L << 0, key_code, &data);
 	mlx_hook(data.mlx_win, 17, 1L << 0, ft_close, &data);
 	mlx_loop(data.mlx);
+	free_all(&data);
+	free(data.mlx);
 }
