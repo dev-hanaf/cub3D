@@ -1,19 +1,26 @@
    
-NO ./path_to_the_north_texture                
-SO ./path_to_the_south_texture           
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+NO                 textures/hitler.xpm
+
+SO   textures/hitler.xpm
+
+WE        textures/hitler.xpm
+
+
+EA     textures/hitler.xpm
 
 F 220           ,      231      , 0
 
-C 225,30,0      
+    C   225,9,30                                                          
 
 
 
 
 
+11111111111
+11000010001
+100N00010001
+11111111111                                                                            
 
-
- 111
-1SS11
+ 1           
+1S11
  111

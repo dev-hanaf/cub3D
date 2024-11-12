@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 06:59:01 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 07:17:54 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/11 04:48:47 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,16 @@ void comma_counter(t_cube *data, char *rgb)
 	}
 }
 
-void init_floor_ciel(t_cube *data, char **splite)
+void init_floor_ciel(t_cube *data, int **arrray, char **splite)
 {
 	int j;
 	
 	j= 0 ;
 	while (splite[j])
 	{
-		//TODO change atoi
-		int num =  ft_atoi(splite[j]);
+		int num =  advanced_atoi(splite[j], splite, data);
 		if (  num >= 0 && num <= 255)
-			data->floor[j] = num;
+			(*arrray)[j] = num;
 		else
 		{
 			free_splite(splite);
@@ -70,8 +69,9 @@ void get_floor(t_cube *data, int i)
 			free_splite(splite);
 			write_errors(data, FAILED_ALLOCATION);
 		}
-		init_floor_ciel(data, splite);
+		init_floor_ciel(data, &data->floor, splite);
 		free_splite(splite);
+		printf("\nFLOOR %d ,%d ,%d\n", data->floor[0], data->floor[1], data->floor[2]);
 	}
 	else
 	{
@@ -80,14 +80,13 @@ void get_floor(t_cube *data, int i)
 		free_all(data);
 		exit(EXIT_FAILURE);
 	}
-	printf("\nFLOOR %d ,%d ,%d\n", data->floor[0], data->floor[1], data->floor[2]);
 }
 
 
 void	get_ciel(t_cube *data, int i)
 {
 	char **splite;
-
+	
 	comma_counter(data, data->object[i].value);	
 	splite = split_whitespaces(data->object[i].value, ", \n\t\r\v\f");
 	if (splite &&  ft_strlen_2d_array(splite) == 3)
@@ -98,8 +97,9 @@ void	get_ciel(t_cube *data, int i)
 			free_splite(splite);
 			write_errors(data, FAILED_ALLOCATION);
 		}
-		init_floor_ciel(data, splite);
+		init_floor_ciel(data, &data->ciel, splite);
 		free_splite(splite);
+		printf("\nCEIL %d ,%d ,%d\n", data->ciel[0], data->ciel[1], data->ciel[2]);
 	}
 	else
 	{
@@ -108,7 +108,6 @@ void	get_ciel(t_cube *data, int i)
 		free_all(data);
 		exit(EXIT_FAILURE);
 	}
-	printf("\nCEIL %d ,%d ,%d\n", data->ciel[0], data->ciel[1], data->ciel[2]);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:48:41 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 06:51:09 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/12 02:49:35 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	free_all(t_cube *data)
 			free(data->floor);
 		if (data->ciel)
 			free(data->ciel);
+		if (data->image)
+			free(data->image);
 	}
 }
 
@@ -64,8 +66,10 @@ void	write_errors(t_cube *data, t_status status)
 		dprintf(2, "Error: invalid position\n");
 	else if (status == PLAYERS)
 		dprintf(2, "Error: invalid player number\n");
-	else if (NO_TEXTURE_FOUND)
+	else if (status ==  NO_TEXTURE_FOUND)
 			dprintf(2, "in direction_colors no texture found\n");
+	else if (status == ATOI)
+		dprintf(2, "Error : advanced atoi\n");
 	free_all(data);
 	exit(EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 07:08:42 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/12 01:42:38 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ typedef enum e_status
 	INVALID_ELEMENT,
 	BAD_POSITION,
 	PLAYERS,
-	NO_TEXTURE_FOUND
+	NO_TEXTURE_FOUND,
+	ATOI
 }				t_status;
 
 typedef struct s_textures
@@ -58,6 +59,14 @@ typedef struct s_map_data
 	char		*value;
 }				t_map_data;
 
+typedef struct s_images
+{
+	void *north;
+	void *east;
+	void *south;
+	void *west;
+}	t_images;
+
 typedef struct s_cube
 {
 	int			idx;
@@ -73,6 +82,7 @@ typedef struct s_cube
 	char		**map;
 	t_map_data	*object;
 	t_textures	*textures;
+	t_images	*image;
 }				t_cube;
 
 void			init(char *av, t_cube *data);
@@ -89,6 +99,7 @@ void			set_object(t_cube *data, int *i);
 bool			get_key(t_cube *data, int i, int *z, char **key);
 void			get_value(t_cube *data, int i, int *z, char **value);
 void 			parse_rgb(t_cube *data);
+int 			advanced_atoi(char *str, char **splite, t_cube *data);
 /********************** utils ******************************** */
 char			**split_whitespaces(char *str, char *seps);
 void			write_errors(t_cube *data, t_status status);
