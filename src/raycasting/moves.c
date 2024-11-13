@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:39:27 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/12 03:44:58 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/13 08:42:04 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	move_player(t_cube *data, double new_x, double new_y)
 		fill_player_square(data, data->pixel_x, data->pixel_y, 0x00000000);
 		draw_grid_lines(data);
 		cast_all_rays(data);
-		// wall_projection(data);
+		wall_projection(data);
 		mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 	}
 }
@@ -68,14 +68,14 @@ int	key_code(int keycode, t_cube *data)
 	}
 	else if (keycode == 119) // w key
 	{
-		new_x = data->pixel_x + 1 * cos(data->rotation_angle) * 3;
-		new_y = data->pixel_y + 1 * sin(data->rotation_angle) * 3;
+		new_x = data->pixel_x + 1 * cos(data->rotation_angle) * 2;
+		new_y = data->pixel_y + 1 * sin(data->rotation_angle) * 2;
 		move_player(data, new_x, new_y);
 	}
 	else if (keycode == 115) // s key
 	{
-		new_x = data->pixel_x - 1 * cos(data->rotation_angle) * 3;
-		new_y = data->pixel_y - 1 * sin(data->rotation_angle) * 3;
+		new_x = data->pixel_x - 1 * cos(data->rotation_angle) * 2;
+		new_y = data->pixel_y - 1 * sin(data->rotation_angle) * 2;
 		move_player(data, new_x, new_y);
 	}
 	else if (keycode == 65363) // right arrow

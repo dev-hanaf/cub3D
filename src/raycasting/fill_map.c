@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:40:23 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/12 03:58:40 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/13 04:59:40 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,25 @@ void	fill_map(t_cube *data)
 		i++;
 	}
 	cast_all_rays(data);
+	printf("pixel_x = %f | pixel_y = %f\n", data->pixel_x, data->pixel_y);
 	fill_player_square(data, data->pixel_x, data->pixel_y, 0x00000000);
 	draw_grid_lines(data);
-	// wall_projection(data);
+	wall_projection(data);
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 }
+
+void	check_direction(t_cube *data)
+{
+	if (data->player_char == 'W')
+		data->rotation_angle = M_PI;
+	else if (data->player_char == 'S')
+		data->rotation_angle = M_PI / 2;
+	else if (data->player_char == 'E')
+		data->rotation_angle = 2 * M_PI;
+	else if (data->player_char == 'N')
+		data->rotation_angle = -M_PI / 2;
+}
+
 void	player_pos(t_cube *data)
 {
 	int	i;
@@ -83,6 +97,7 @@ void	player_pos(t_cube *data)
 
 	i = 0;
 	j = 0;
+	data->player_char = 0;
 	while (i < data->height)
 	{
 		j = 0;
@@ -90,6 +105,7 @@ void	player_pos(t_cube *data)
 		{
 			if (is_player(data->map[i][j]))
 			{
+				data->player_char = data->map[i][j];
 				data->tile_x = j;
 				data->tile_y = i;
 				data->pixel_x = (j * 32) + (32 - 8) / 2;
@@ -100,4 +116,5 @@ void	player_pos(t_cube *data)
 		}
 		i++;
 	}
+	check_direction(data);
 }

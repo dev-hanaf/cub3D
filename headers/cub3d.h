@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/12 03:58:06 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/13 08:39:54 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_ray
 	double		distance;
 	double		wallhitx;
 	double		wallhity;
+	int 	was_hit_horizontal;
+	int 	was_hit_vertical;
 	int		flag;
 }	t_ray;
 
@@ -127,9 +129,13 @@ typedef struct s_cube
 	double		wallhity;
 	void	*img;
 	char	*addr;
+	char	*addr1;
 	int		bits_per_pixel;
+	int		bits_per_pixel1;
 	int		line_length;
+	int		line_length1;
 	int		endian;
+	int		endian1;
 	double     x_player;
 	double     y_player;
 	double     pixel_x;
@@ -152,9 +158,23 @@ typedef struct s_cube
 	double ray_angle;
 	int tile_x;
 	int tile_y;
+	char	player_char;
+	int		wall_top;
+	int		wall_bottom;
+	double	wallheight;
+	int		window_width;
+	int		window_height;
+	//textures
+	double		texy;
+	double		texx;
+	double		texpos;
+	int		tex_h;
+	int 		tex_w;
+	void	*img1;
 	t_ray *rays;
 }				t_cube;
 
+// texture[texHeight * texY + texX];
 
 /************************** Raycasting********************************* */
 //== Draw

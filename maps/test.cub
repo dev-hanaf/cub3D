@@ -1,16 +1,17 @@
-   
-NO                 textures/hitler.xpm
-
-SO   textures/hitler.xpm
-
+                 
+F 220           ,      231      , 0
 WE        textures/hitler.xpm
 
+                                   NO                 textures/hitler.xpm
 
-EA     textures/hitler.xpm
+    SO       textures/hitler.xpm
 
-F 220           ,      231      , 0
 
-    C   225,9,30                                                          
+
+EA                  textures/hitler.xpm
+
+C   225,9,30                                                          
+
 
 
 
@@ -18,7 +19,7 @@ F 220           ,      231      , 0
 
 11111111111111111111111111
 10001000000000000000000001
-10N00001000000000000000001
+10S00001000000000000000001
 10011000000101110000001001
 10000000000100000000110001
 10011000000101110000110001

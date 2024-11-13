@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:36:48 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/12 03:26:52 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:35:37 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ double	normalize_angle(double angle)
 
 void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray)
 {
+	current_ray->was_hit_vertical = 0;
+	current_ray->was_hit_horizontal = 0;
 	if (cast->distance_h < cast->distance_v)
 	{
 		data->closest_dis = cast->distance_h;
@@ -30,6 +32,7 @@ void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray)
 		current_ray->distance = cast->distance_h;
 		current_ray->wallhitx = cast->xintercept_h;
 		current_ray->wallhity = cast->yintercept_h;
+		current_ray->was_hit_horizontal = 1;
 	}
 	else
 	{
@@ -39,7 +42,7 @@ void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray)
 		current_ray->distance = cast->distance_v;
 		current_ray->wallhitx = cast->xintercept_v;
 		current_ray->wallhity = cast->yintercept_v;
-		// printf("\nVERTICAL x = %f, y = %f\n", xintercept_v, yintercept_v);
+		current_ray->was_hit_vertical = 1;
 	}
 }
 
