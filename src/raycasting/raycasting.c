@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:36:48 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/13 11:35:37 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:30:28 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,22 @@ void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray)
 	}
 }
 
+void	fill_direction(t_ray *current_ray, t_cube *data)
+{
+	current_ray->is_up = 0;
+	current_ray->is_down = 0;
+	current_ray->is_left = 0;
+	current_ray->is_right = 0;
+	if (data->ray_up)
+		current_ray->is_up = 1;
+	if (data->ray_down)
+		current_ray->is_down = 1;
+	if (data->ray_left)
+		current_ray->is_left = 1;
+	if (data->ray_right)
+		current_ray->is_right = 1;
+}
+
 void	cast(t_cube *data, t_ray *current_ray)
 {
 	t_cast	*cast;
@@ -59,6 +75,8 @@ void	cast(t_cube *data, t_ray *current_ray)
 	data->ray_down = !data->ray_up;
 	data->ray_right = data->ray_angle < M_PI_2 || data->ray_angle > 3 * M_PI_2;
 	data->ray_left = !data->ray_right;
+
+	fill_direction(current_ray, data);
 	// find first horizontal intercept
 	find_hor_hit(cast, data);
 	// Vertical intersection

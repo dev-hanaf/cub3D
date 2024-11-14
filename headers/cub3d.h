@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/13 08:39:54 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:38:57 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ typedef struct s_ray
 	int 	was_hit_horizontal;
 	int 	was_hit_vertical;
 	int		flag;
+	int		is_up;
+	int		is_down;
+	int		is_left;
+	int		is_right;
 }	t_ray;
 
 typedef struct s_cast
@@ -128,14 +132,30 @@ typedef struct s_cube
 	double		wallhitx;
 	double		wallhity;
 	void	*img;
+	void	*img1;
+	void	*img2;
+	void	*img3;
+	void	*img4;
 	char	*addr;
 	char	*addr1;
+	char	*addr2;
+	char	*addr3;
+	char	*addr4;
 	int		bits_per_pixel;
 	int		bits_per_pixel1;
+	int		bits_per_pixel2;
+	int		bits_per_pixel3;
+	int		bits_per_pixel4;
 	int		line_length;
 	int		line_length1;
+	int		line_length2;
+	int		line_length3;
+	int		line_length4;
 	int		endian;
 	int		endian1;
+	int		endian2;
+	int		endian3;
+	int		endian4;
 	double     x_player;
 	double     y_player;
 	double     pixel_x;
@@ -170,7 +190,9 @@ typedef struct s_cube
 	double		texpos;
 	int		tex_h;
 	int 		tex_w;
-	void	*img1;
+	int 	tex_w1;
+	int 	tex_h1;
+	void	*gun;
 	t_ray *rays;
 }				t_cube;
 

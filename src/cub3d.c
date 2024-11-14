@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 04:13:53 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/13 08:49:32 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:38:30 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,10 +149,11 @@ int	main(int ac, char **av)
 	init_var(&data);
 	player_pos(&data);
 	fill_map(&data);
-	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
+	// mlx_put_image_to_window(data.mlx, data.mlx_win, data.img, 0, 0);
 	mlx_hook(data.mlx_win, 02, 1L << 0, key_code, &data);
 	mlx_hook(data.mlx_win, 17, 1L << 0, ft_close, &data);
-	mlx_put_image_to_window(data.mlx, data.mlx_win, data.img1, 0, 0);
+	// mlx_put_image_to_window(data.mlx, data.mlx_win, data.img1, 0, 0);
+	// mlx_put_image_to_window(data.mlx, data.mlx_win, data.gun, 0, 0);
 	mlx_loop(data.mlx);
 	free_all(&data);
 	free(data.mlx);
