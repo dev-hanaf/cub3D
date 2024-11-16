@@ -1,14 +1,14 @@
                  
 F 220           ,      231      , 0
-WE        textures/hitler.xpm
+WE        textures/test1.xpm
 
-                                   NO                 textures/hitler.xpm
+                                   NO                 textures/test1.xpm
 
-    SO       textures/hitler.xpm
+    SO       textures/test1.xpm
 
 
 
-EA                  textures/hitler.xpm
+EA                  textures/test1.xpm
 
 C   225,9,30                                                          
 

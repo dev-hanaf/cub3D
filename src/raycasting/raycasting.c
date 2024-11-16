@@ -6,19 +6,11 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:36:48 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/13 18:30:28 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:15:29 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-double	normalize_angle(double angle)
-{
-	angle = fmod(angle, 2 * M_PI);
-	if (angle < 0)
-		angle += 2 * M_PI;
-	return (angle);
-}
 
 void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray)
 {
@@ -75,7 +67,6 @@ void	cast(t_cube *data, t_ray *current_ray)
 	data->ray_down = !data->ray_up;
 	data->ray_right = data->ray_angle < M_PI_2 || data->ray_angle > 3 * M_PI_2;
 	data->ray_left = !data->ray_right;
-
 	fill_direction(current_ray, data);
 	// find first horizontal intercept
 	find_hor_hit(cast, data);
@@ -88,6 +79,7 @@ void	cast(t_cube *data, t_ray *current_ray)
 	cast->dy_v = cast->yintercept_v - data->pixel_y;
 	cast->distance_v = sqrt(cast->dx_v * cast->dx_v + cast->dy_v * cast->dy_v);
 	calcul_closest_distance(cast, data, current_ray);
+	free(cast);
 }
 
 void	init_rays(t_cube *data)
@@ -116,7 +108,7 @@ void	cast_all_rays(t_cube *data)
 	double	ray_increment;
 
 	ray_id = 0;
-	ray_increment = data->fov / (data->width * 32);
+	ray_increment = data->fov / (data->width * TILE_SIZE);
 	data->ray_angle = data->rotation_angle - (data->fov / 2);
 	data->wallhitx = 0;
 	data->wallhity = 0;
@@ -127,7 +119,6 @@ void	cast_all_rays(t_cube *data)
 		data->ray_angle = normalize_angle(data->ray_angle);
 		data->rays[ray_id].ray_angle = data->ray_angle;
 		cast(data, &data->rays[ray_id]);
-		draw_ray(data);
 		data->ray_angle += ray_increment;
 		ray_id += 1;
 	}
