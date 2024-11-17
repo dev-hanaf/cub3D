@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 04:13:53 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/16 11:12:25 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/17 08:52:20 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,10 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	check_textures(&data);
-	data.mlx_win = mlx_new_window(data.mlx, data.width * TILE_SIZE, data.height
-			* TILE_SIZE, "cub3d");
+	data.mlx_win = mlx_new_window(data.mlx, 1920, 1080, "cub3d");
 	if (!data.mlx_win)
 	{
-		// TODO free mlx and data;
+		// TODO: free mlx and data;
 		return (1);
 	}
 	printf("data.width = %d | data.height = %d\n", data.width, data.height);

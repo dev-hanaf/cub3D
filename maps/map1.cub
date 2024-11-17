@@ -1,14 +1,16 @@
-                NO      ./textures/text1.xpm
-SO               ./textures/text2.xpm
-                       
-WE ./textures/text3.xpm
-               
-EA ./textures/text4.xpm
+                 
+F 220           ,      231      , 0
+WE        textures/test1.xpm
 
-F 0,255,0
+                                   NO                 textures/test1.xpm
 
-C 56,255,230
+    SO       textures/test1.xpm
 
+
+
+EA                  textures/test1.xpm
+
+C   225,9,30
 
 
                                                         11111111111111111111111111111111111111111111111

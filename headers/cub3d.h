@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/16 10:19:29 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/17 08:35:59 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,7 @@ typedef struct s_cube
 	int			tex_w1;
 	int			tex_h1;
 	void		*gun;
+	int			tile_size;
 	t_ray		*rays;
 }				t_cube;
 

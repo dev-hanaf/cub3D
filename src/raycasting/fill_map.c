@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:40:23 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/16 11:13:42 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/17 08:49:59 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	fill_map(t_cube *data)
 	mlx_clear_window(data->mlx, data->mlx_win);
 	cast_all_rays(data);
 	wall_projection(data);
-	render_gun(data);
+	// render_gun(data);
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, 0, 0);
 }
 
