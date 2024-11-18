@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 01:05:19 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/11 00:39:53 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:59:12 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	initialize_file_reading(t_cube *data, char *av, int *fd)
 		write_errors(NULL, FAILED_ALLOCATION);
 }
 
-		
 void	controller(t_cube *data)
 {
 	int	i;

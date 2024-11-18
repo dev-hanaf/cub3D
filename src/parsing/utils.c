@@ -6,73 +6,11 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:48:41 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/12 02:49:35 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/18 17:10:48 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	free_all(t_cube *data)
-{
-	int	i;
-
-	i = 0;
-	if (data)
-	{
-		if (data->map)
-		{
-			while (data->map[i])
-				free(data->map[i++]);
-			free(data->map);
-		}
-		i = 0;
-		if (data->object && data->textures->map)
-		{
-			while (i <= data->idx)
-			{
-				free(data->object[i].key);
-				free(data->object[i++].value);
-			}
-			free(data->object);
-		}
-		if (data->textures)
-			free(data->textures);
-		if (data->floor)
-			free(data->floor);
-		if (data->ciel)
-			free(data->ciel);
-		if (data->image)
-			free(data->image);
-	}
-}
-
-void	write_errors(t_cube *data, t_status status)
-{
-	if (status == FILE_NAME)
-		dprintf(2, "Error: bad file name\n");
-	else if (status == FD)
-		dprintf(2, "Error: fd -1\n");
-	else if (status == FAILED_ALLOCATION)
-		dprintf(2, "Error: failed allocation\n");
-	else if (status == BAD_ARGUMENTS)
-		dprintf(2, "Error: bad arguments\n");
-	else if (status == DUPLICATE)
-		dprintf(2, "Error: detect a duplicate\n");
-	else if (status == MISSED)
-		dprintf(2, "Error: missed arguments\n");
-	else if (status == INVALID_ELEMENT)
-		dprintf(2, "Error: invalid element\n");
-	else if (status == BAD_POSITION)
-		dprintf(2, "Error: invalid position\n");
-	else if (status == PLAYERS)
-		dprintf(2, "Error: invalid player number\n");
-	else if (status ==  NO_TEXTURE_FOUND)
-			dprintf(2, "in direction_colors no texture found\n");
-	else if (status == ATOI)
-		dprintf(2, "Error : advanced atoi\n");
-	free_all(data);
-	exit(EXIT_FAILURE);
-}
 
 bool	get_key(t_cube *data, int i, int *z, char **key)
 {
@@ -111,4 +49,27 @@ void	get_value(t_cube *data, int i, int *z, char **value)
 		j++;
 	}
 	*z = j;
+}
+
+void	init_texture_maps(char *keys[6], int **keys_lower, t_cube *data)
+{
+	keys[0] = "SO";
+	keys[1] = "NO";
+	keys[2] = "WE";
+	keys[3] = "EA";
+	keys[4] = "F";
+	keys[5] = "C";
+	keys_lower[0] = &data->textures->so;
+	keys_lower[1] = &data->textures->no;
+	keys_lower[2] = &data->textures->we;
+	keys_lower[3] = &data->textures->ea;
+	keys_lower[4] = &data->textures->f;
+	keys_lower[5] = &data->textures->c;
+}
+
+int	create_rgb(bool floor, int *array)
+{
+	if (floor)
+		return (0 << 24 | array[0] << 16 | array[1] << 8 | array[2]);
+	return (0 << 24 | array[0] << 16 | array[1] << 8 | array[2]);
 }

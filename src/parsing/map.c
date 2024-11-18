@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 06:34:27 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/12 03:29:39 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/17 02:09:20 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	general_check(t_cube *data, int i, int j)
 		if (i == 0 || i == (int)(data->height) - 1 || j == 0
 			|| j == (int)(data->width) - 1)
 			write_errors(data, BAD_POSITION);
-		if (s[i - 1][j] == ' ' || s[i + 1][j] == ' ' || s[i][j - 1] == ' '
-			|| s[i][j + 1] == ' ')
+		if (white_spaces(s[i - 1][j]) || white_spaces(s[i + 1][j])
+			|| white_spaces(s[i][j - 1]) || white_spaces(s[i][j + 1]))
 			write_errors(data, BAD_POSITION);
 	}
 }
