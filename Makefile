@@ -12,7 +12,7 @@ OBJ = $(SRC:.c=.o)
 NAME = cub3D
 
 
-LIBS = -L$(LIBFT) -lft -L$(GARBAGE) -lgarbage
+LIBS = -L$(LIBFT) -lft 
 
 INC = -Iincludes/libft -Iheaders
 
