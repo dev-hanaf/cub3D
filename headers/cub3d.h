@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/12 03:58:06 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:55:37 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,18 @@ typedef struct s_images
 	void *west;
 }	t_images;
 
+typedef struct s_rgb
+{
+	int r;
+	int g;
+	int b;
+}	t_rgb;
+
 typedef struct s_cube
 {
 	int			idx;
-	int			*floor;
-	int			*ciel;
+	int			floor;
+	int			ciel;
 	void		*mlx;
 	void		*mlx_win;
 	int		height;
@@ -122,6 +129,7 @@ typedef struct s_cube
 	t_map_data	*object;
 	t_textures	*textures;
 	t_images	*image;
+	t_rgb		rgb[2];
 	//hfafouri
 	double		wallhitx;
 	double		wallhity;
@@ -220,5 +228,7 @@ int 			ft_strlen_2d_array(char **str);
 void 			free_splite(char **str);
 void			to_remove_function(t_cube *data);
 bool 			is_player(char c);
+void	init_texture_maps(char *keys[6], int **keys_lower, t_cube *data);
+
 
 #endif
