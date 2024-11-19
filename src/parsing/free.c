@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:59:49 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/18 17:00:14 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/19 21:21:09 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,30 @@ void	write_errors(t_cube *data, t_status status)
 	else if (status == ATOI)
 		dprintf(2, "Error : advanced atoi\n");
 	free_all(data);
+	exit(EXIT_FAILURE);
+}
+
+void	free_images(t_cube *data)
+{
+	if (data->image->east)
+	{
+		free(data->image->east);
+	}
+	if (data->image->west)
+	{
+		free(data->image->west);
+	}
+	if (data->image->north)
+	{
+		free(data->image->north);
+	}
+	if (data->image->south)
+	{
+		free(data->image->south);
+	}
+	dprintf(2, "Error : xpm_file_to_image == NULL\n");
+	mlx_destroy_display(data->mlx);
+	free_all(data);
+	free(data->mlx);
 	exit(EXIT_FAILURE);
 }

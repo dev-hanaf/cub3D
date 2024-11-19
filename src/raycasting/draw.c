@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:30:32 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/18 10:38:40 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/19 21:06:32 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,15 @@ void	my_mlx_pixel_put(t_cube *data, int x, int y, int color)
 {
 	char	*dst;
 
-    if (x < 0 || x >= data->window_width || y < 0 || y >= data->window_height)
+	if (x < 0 || x >= data->window_width || y < 0 || y >= data->window_height)
 	{
-		return;
+		return ;
 	}
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
 
+/*
 void	draw_line(t_cube *data, int x, int y, int length, int is_horizontal)
 {
 	int	i;
@@ -94,4 +95,4 @@ void	draw_ray(t_cube *data)
 		y += dy;
 		i++;
 	}
-}
+} */

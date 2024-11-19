@@ -1,14 +1,14 @@
                  
 F 220           ,      231      , 0
-WE        textures/test1.xpm
+WE        textures/tex1.xpm
 
-                                   NO                 textures/test1.xpm
+                                   NO                 textures/tex2.xpm
 
-    SO       textures/test1.xpm
+    SO       textures/tex3.xpm
 
 
 
-EA                  textures/test1.xpm
+EA                  textures/tex4.xpm
 
 C   225,9,30
 

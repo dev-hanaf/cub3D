@@ -72,7 +72,7 @@ void	init(char *av, t_cube *data)
 	char	*line;
 
 	data->window_width = 1920;
-  data->window_height = 1080;
+	data->window_height = 1080;
 	initialize_file_reading(data, av, &fd);
 	i = 0;
 	line = NULL;

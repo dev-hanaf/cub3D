@@ -1,50 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/08 03:54:58 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/19 21:24:24 by hfafouri         ###   ########.fr       */
+/*   Created: 2024/11/19 21:24:09 by hfafouri          #+#    #+#             */
+/*   Updated: 2024/11/19 21:24:30 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	free_map(t_cube *data)
+void	display_map(t_cube *data)
 {
 	int	i;
 
 	i = 0;
 	while (data->map && data->map[i])
-		free(data->map[i++]);
-	free(data->map);
+	{
+		printf("%s\n", data->map[i++]);
+	}
 }
 
-int	ft_strlen_2d_array(char **str)
+bool	white_spaces(char c)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-void	free_splite(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-		free(str[i++]);
-	free(str);
-}
-
-bool	is_player(char c)
-{
-	if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
+	if (c == 32 || (c >= 9 && c <= 13))
 		return (true);
 	return (false);
+}
+
+void	ft_strcpy(char *dst, char c)
+{
+	*dst++ = c;
+	*dst = '\0';
 }

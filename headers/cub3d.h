@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/19 21:16:34 by hfafouri          #+#    #+#             */
+/*   Updated: 2024/11/19 21:18:21 by hfafouri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -102,10 +114,10 @@ typedef struct s_images
 
 typedef struct s_rgb
 {
-	int r;
-	int g;
-	int b;
-}	t_rgb;
+	int			r;
+	int			g;
+	int			b;
+}				t_rgb;
 
 typedef struct s_cube
 {
@@ -124,7 +136,7 @@ typedef struct s_cube
 	t_textures	*textures;
 	t_images	*image;
 	t_rgb		rgb[2];
-	//hfafouri
+	// hfafouri
 	double		wallhitx;
 	double		wallhity;
 	double		correct_ray;
@@ -202,10 +214,6 @@ typedef struct s_cube
 //== Draw
 int				hit_wall(t_cube *data, double x, double y);
 void			my_mlx_pixel_put(t_cube *data, int x, int y, int color);
-void			draw_line(t_cube *data, int x, int y, int length,
-					int is_horizontal);
-void			draw_grid_lines(t_cube *data);
-void			draw_ray(t_cube *data);
 //== find hits
 void			horizontal_hit(t_cast *cast, t_cube *data);
 void			find_hor_hit(t_cast *cast, t_cube *data);
@@ -254,7 +262,7 @@ bool			get_key(t_cube *data, int i, int *z, char **key);
 void			get_value(t_cube *data, int i, int *z, char **value);
 void			parse_rgb(t_cube *data);
 int				advanced_atoi(char *str, char **splite, t_cube *data);
-
+void			free_images(t_cube *data);
 /********************** utils ******************************** */
 char			**split_whitespaces(char *str, char *seps);
 void			write_errors(t_cube *data, t_status status);
@@ -268,7 +276,8 @@ int				ft_strlen_2d_array(char **str);
 void			free_splite(char **str);
 void			to_remove_function(t_cube *data);
 int				ft_close(t_cube *data);
-bool 			is_player(char c);
-void	init_texture_maps(char *keys[6], int **keys_lower, t_cube *data);
+bool			is_player(char c);
+void			init_texture_maps(char *keys[6], int **keys_lower,
+					t_cube *data);
 
 #endif

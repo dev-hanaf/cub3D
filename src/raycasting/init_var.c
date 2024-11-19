@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:45:01 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/18 10:43:05 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/19 21:07:46 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,29 @@ int	is_wall(t_cube *data, int x, int y)
 	return (data->map[tile_y][tile_x] == '1');
 }
 
+void	assign_images_to(t_cube *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < 6)
+	{
+		if (!ft_strncmp("NO", data->object[i].key, 3))
+			data->img1 = mlx_xpm_file_to_image(data->mlx, data->object[i].value,
+					&data->tex_w, &data->tex_h);
+		else if (!ft_strncmp("SO", data->object[i].key, 3))
+			data->img2 = mlx_xpm_file_to_image(data->mlx, data->object[i].value,
+					&data->tex_w, &data->tex_h);
+		else if (!ft_strncmp("EA", data->object[i].key, 3))
+			data->img3 = mlx_xpm_file_to_image(data->mlx, data->object[i].value,
+					&data->tex_w, &data->tex_h);
+		else if (!ft_strncmp("WE", data->object[i].key, 3))
+			data->img4 = mlx_xpm_file_to_image(data->mlx, data->object[i].value,
+					&data->tex_w, &data->tex_h);
+		i++;
+	}
+}
+
 void	init_var(t_cube *data)
 {
 	data->sfactor = 0.3;
@@ -44,14 +67,7 @@ void	init_var(t_cube *data)
 	data->correct_ray = 0;
 	data->color = 0;
 	data->num_of_rays = data->width * TILE_SIZE;
-	data->img1 = mlx_xpm_file_to_image(data->mlx, "textures/tex1.xpm",
-			&data->tex_w, &data->tex_h);
-	data->img2 = mlx_xpm_file_to_image(data->mlx, "textures/tex2.xpm",
-			&data->tex_w, &data->tex_h);
-	data->img3 = mlx_xpm_file_to_image(data->mlx, "textures/tex3.xpm",
-			&data->tex_w, &data->tex_h);
-	data->img4 = mlx_xpm_file_to_image(data->mlx, "textures/tex4.xpm",
-			&data->tex_w, &data->tex_h);
+	assign_images_to(data);
 	data->addr1 = mlx_get_data_addr(data->img1, &data->bits_per_pixel1,
 			&data->line_length1, &data->endian1);
 	data->addr2 = mlx_get_data_addr(data->img2, &data->bits_per_pixel2,

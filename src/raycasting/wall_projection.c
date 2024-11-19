@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:46:16 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/18 10:45:09 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:23:34 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ void	draw_ceiling_floor(t_cube *data, int y, int x)
 	y = 0;
 	while (y < data->wall_top)
 	{
-		my_mlx_pixel_put(data, x, y, 0x87CEEB);
+		my_mlx_pixel_put(data, x, y, data->ciel);
 		y++;
 	}
 	y = data->wall_bottom;
 	while (y < data->window_height)
 	{
-		my_mlx_pixel_put(data, x, y, 0xFFFFDA);
+		my_mlx_pixel_put(data, x, y, data->floor);
 		y++;
 	}
 }
