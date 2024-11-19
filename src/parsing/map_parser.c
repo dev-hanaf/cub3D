@@ -6,16 +6,15 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 02:06:43 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/10 07:09:08 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:55:00 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-
-void free_object_by_idx(t_cube *data, char **key)
+void	free_object_by_idx(t_cube *data, char **key)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	free(*key);
@@ -49,24 +48,6 @@ int	check_directions_colors(t_cube *data, char **key)
 	i = p->c + p->f + p->ea + p->no + p->so + p->we;
 	return (i);
 }
-
-void	init_texture_maps(char *keys[6], int **keys_lower, t_cube *data)
-{
-	keys[0] = "SO";
-	keys[1] = "NO";
-	keys[2] = "WE";
-	keys[3] = "EA";
-	keys[4] = "F";
-	keys[5] = "C";
-	keys_lower[0] = &data->textures->so;
-	keys_lower[1] = &data->textures->no;
-	keys_lower[2] = &data->textures->we;
-	keys_lower[3] = &data->textures->ea;
-	keys_lower[4] = &data->textures->f;
-	keys_lower[5] = &data->textures->c;
-}
-
-
 
 void	directions_colors(t_cube *data, char **key)
 {

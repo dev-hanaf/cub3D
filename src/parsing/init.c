@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/07 01:05:19 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/18 10:46:31 by hfafouri         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
 void	file_name(char *path)
@@ -63,7 +51,6 @@ void	initialize_file_reading(t_cube *data, char *av, int *fd)
 		write_errors(NULL, FAILED_ALLOCATION);
 }
 
-		
 void	controller(t_cube *data)
 {
 	int	i;
@@ -85,7 +72,7 @@ void	init(char *av, t_cube *data)
 	char	*line;
 
 	data->window_width = 1920;
-    data->window_height = 1080;
+  data->window_height = 1080;
 	initialize_file_reading(data, av, &fd);
 	i = 0;
 	line = NULL;

@@ -6,17 +6,18 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 06:59:01 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/11 04:48:47 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:56:39 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+int		create_rgb(bool floor, int *array);
 
-void comma_counter(t_cube *data, char *rgb)
+void	comma_counter(t_cube *data, char *rgb)
 {
-	int counter;
-	int i;
+	int	counter;
+	int	i;
 
 	i = 0;
 	counter = 0;
@@ -34,16 +35,17 @@ void comma_counter(t_cube *data, char *rgb)
 	}
 }
 
-void init_floor_ciel(t_cube *data, int **arrray, char **splite)
+void	init_floor_ciel(t_cube *data, int *arrray, char **splite)
 {
-	int j;
-	
-	j= 0 ;
+	int	j;
+	int	num;
+
+	j = 0;
 	while (splite[j])
 	{
-		int num =  advanced_atoi(splite[j], splite, data);
-		if (  num >= 0 && num <= 255)
-			(*arrray)[j] = num;
+		num = advanced_atoi(splite[j], splite, data);
+		if (num >= 0 && num <= 255)
+			arrray[j] = num;
 		else
 		{
 			free_splite(splite);
@@ -55,23 +57,19 @@ void init_floor_ciel(t_cube *data, int **arrray, char **splite)
 	}
 }
 
-void get_floor(t_cube *data, int i)
+void	get_floor(t_cube *data, int i)
 {
-	char **splite;
+	char	**splite;
+	int		floor[3];
 
-	comma_counter(data, data->object[i].value);	
+	comma_counter(data, data->object[i].value);
 	splite = split_whitespaces(data->object[i].value, ", \n\t\r\v\f");
-	if (splite &&  ft_strlen_2d_array(splite) == 3)
+	if (splite && ft_strlen_2d_array(splite) == 3)
 	{
-		data->floor = malloc(sizeof(int) * 3);
-		if (!data->floor)
-		{
-			free_splite(splite);
-			write_errors(data, FAILED_ALLOCATION);
-		}
-		init_floor_ciel(data, &data->floor, splite);
+		init_floor_ciel(data, floor, splite);
 		free_splite(splite);
-		printf("\nFLOOR %d ,%d ,%d\n", data->floor[0], data->floor[1], data->floor[2]);
+		data->floor = create_rgb(true, floor);
+		printf("\nFLOOR %d ,%d ,%d\n", floor[0], floor[1], floor[2]);
 	}
 	else
 	{
@@ -81,25 +79,20 @@ void get_floor(t_cube *data, int i)
 		exit(EXIT_FAILURE);
 	}
 }
-
 
 void	get_ciel(t_cube *data, int i)
 {
-	char **splite;
-	
-	comma_counter(data, data->object[i].value);	
+	char	**splite;
+	int		ciel[3];
+
+	comma_counter(data, data->object[i].value);
 	splite = split_whitespaces(data->object[i].value, ", \n\t\r\v\f");
-	if (splite &&  ft_strlen_2d_array(splite) == 3)
+	if (splite && ft_strlen_2d_array(splite) == 3)
 	{
-		data->ciel = malloc(sizeof(int) * 3);
-		if (!data->ciel)
-		{
-			free_splite(splite);
-			write_errors(data, FAILED_ALLOCATION);
-		}
-		init_floor_ciel(data, &data->ciel, splite);
+		init_floor_ciel(data, ciel, splite);
 		free_splite(splite);
-		printf("\nCEIL %d ,%d ,%d\n", data->ciel[0], data->ciel[1], data->ciel[2]);
+		data->ciel = create_rgb(false, ciel);
+		printf("\nCEIL %d ,%d ,%d\n", ciel[0], ciel[1], ciel[2]);
 	}
 	else
 	{
@@ -110,10 +103,9 @@ void	get_ciel(t_cube *data, int i)
 	}
 }
 
-
-void parse_rgb(t_cube *data)
+void	parse_rgb(t_cube *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (data && i < 6)
@@ -124,4 +116,6 @@ void parse_rgb(t_cube *data)
 			get_ciel(data, i);
 		i++;
 	}
+	printf("floor ------------------------> %d\n", data->floor);
+	printf("ciel  ------------------------> %d\n", data->ciel);
 }
