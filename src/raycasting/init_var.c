@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:45:01 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/17 08:50:08 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:43:05 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ void	init_var(t_cube *data)
 	data->sfactor = 0.3;
 	data->rotation_speed = 2 * (M_PI / 180);
 	data->fov = 60 * (M_PI / 180);
+	data->wall_top = 0;
+	data->wall_bottom = 0;
+	data->wallheight = 0;
+	data->correct_ray = 0;
+	data->color = 0;
 	data->num_of_rays = data->width * TILE_SIZE;
 	data->img1 = mlx_xpm_file_to_image(data->mlx, "textures/tex1.xpm",
 			&data->tex_w, &data->tex_h);
@@ -47,10 +52,6 @@ void	init_var(t_cube *data)
 			&data->tex_w, &data->tex_h);
 	data->img4 = mlx_xpm_file_to_image(data->mlx, "textures/tex4.xpm",
 			&data->tex_w, &data->tex_h);
-	data->gun = mlx_xpm_file_to_image(data->mlx, "textures/gun_1.xpm",
-			&data->tex_w, &data->tex_h);
-	data->gun_add = mlx_get_data_addr(data->gun, &data->bits_per_pixel_g,
-			&data->line_length_g, &data->endian_g);
 	data->addr1 = mlx_get_data_addr(data->img1, &data->bits_per_pixel1,
 			&data->line_length1, &data->endian1);
 	data->addr2 = mlx_get_data_addr(data->img2, &data->bits_per_pixel2,

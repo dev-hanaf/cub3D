@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 20:29:36 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/17 08:35:59 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:42:40 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,9 @@ typedef struct s_cube
 	// hfafouri
 	double		wallhitx;
 	double		wallhity;
+	double		correct_ray;
+	char		*pixel;
+	int			color;
 	void		*img;
 	void		*img1;
 	void		*img2;
@@ -141,21 +144,19 @@ typedef struct s_cube
 	char		*addr2;
 	char		*addr3;
 	char		*addr4;
-	char		*gun_add;
+	double		sfactor;
 	int			bits_per_pixel_g;
 	int			bits_per_pixel;
 	int			bits_per_pixel1;
 	int			bits_per_pixel2;
 	int			bits_per_pixel3;
 	int			bits_per_pixel4;
-
 	int			line_length_g;
 	int			line_length;
 	int			line_length1;
 	int			line_length2;
 	int			line_length3;
 	int			line_length4;
-
 	int			endian_g;
 	int			endian;
 	int			endian1;
@@ -166,10 +167,7 @@ typedef struct s_cube
 	double		y_player;
 	double		pixel_x;
 	double		pixel_y;
-	int			turndirection;
-	int			walkdireciton;
 	float		rotation_speed;
-	int			radius;
 	double		rotation_angle;
 	double		fov;
 	double		closest_dis;
@@ -180,7 +178,6 @@ typedef struct s_cube
 	int			ray_left;
 	int			ray_right;
 	int			*ray;
-	double		sfactor;
 	double		ray_angle;
 	int			tile_x;
 	int			tile_y;
@@ -190,6 +187,8 @@ typedef struct s_cube
 	double		wallheight;
 	int			window_width;
 	int			window_height;
+	double		scale_factor_x;
+	double		scale_factor_y;
 	// textures
 	double		texy;
 	double		texx;
@@ -198,8 +197,6 @@ typedef struct s_cube
 	int			tex_w;
 	int			tex_w1;
 	int			tex_h1;
-	void		*gun;
-	int			tile_size;
 	t_ray		*rays;
 }				t_cube;
 
@@ -242,7 +239,7 @@ void			init_var(t_cube *data);
 // wall projection
 void			wall_projection(t_cube *data);
 void			render_gun(t_cube *data);
-unsigned int render_texture(t_cube *data, int tex_x, int tex_y, int ray_id);
+unsigned int	render_texture(t_cube *data, int tex_x, int tex_y, int ray_id);
 
 /************************** Parsing ********************************* */
 

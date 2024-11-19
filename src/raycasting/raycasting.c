@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:36:48 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/17 08:50:37 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:35:53 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ void	cast(t_cube *data, t_ray *current_ray)
 	data->ray_right = data->ray_angle < M_PI_2 || data->ray_angle > 3 * M_PI_2;
 	data->ray_left = !data->ray_right;
 	fill_direction(current_ray, data);
-	// find first horizontal intercept
 	find_hor_hit(cast, data);
-	// Vertical intersection
 	find_ver_hit(cast, data);
 	cast->dx_h = cast->xintercept_h - data->pixel_x;
 	cast->dy_h = cast->yintercept_h - data->pixel_y;
@@ -108,7 +106,8 @@ void	cast_all_rays(t_cube *data)
 	double	ray_increment;
 
 	ray_id = 0;
-	ray_increment = data->fov / (data->width * TILE_SIZE);
+	data->num_of_rays = data->window_width;
+	ray_increment = data->fov / data->num_of_rays;
 	data->ray_angle = data->rotation_angle - (data->fov / 2);
 	data->wallhitx = 0;
 	data->wallhity = 0;

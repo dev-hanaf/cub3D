@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:30:32 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/17 08:50:52 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:38:40 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ int	hit_wall(t_cube *data, double x, double y)
 
 	tile_x = floor(x / TILE_SIZE);
 	tile_y = floor(y / TILE_SIZE);
-	// printf("bounds: x=%d, y=%d\n", tile_x, tile_y);
-	// if (tile_x <= 0 || tile_x  >= data->width * 32 ||
-	//     tile_y <= 0 || tile_y  >= data->height * 32)
-	// {
-	//     return (0);
-	// }
 	if (tile_x < 0 || tile_x >= data->width || tile_y < 0
 		|| tile_y >= data->height)
 		return (1);
@@ -35,9 +29,10 @@ void	my_mlx_pixel_put(t_cube *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x < 0 || x >= data->width * TILE_SIZE || y < 0 || y >= data->height
-		* TILE_SIZE)
-		return ;
+    if (x < 0 || x >= data->window_width || y < 0 || y >= data->window_height)
+	{
+		return;
+	}
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }

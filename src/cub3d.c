@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 04:13:53 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/17 08:52:20 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:47:02 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	ft_close(t_cube *data)
 	mlx_destroy_image(data->mlx, data->img3);
 	mlx_destroy_image(data->mlx, data->img4);
 	mlx_destroy_image(data->mlx, data->img);
-	mlx_destroy_image(data->mlx, data->gun);
 	mlx_destroy_window(data->mlx, data->mlx_win);
 	mlx_destroy_display(data->mlx);
 	free_all(data);
@@ -140,15 +139,13 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	check_textures(&data);
-	data.mlx_win = mlx_new_window(data.mlx, 1920, 1080, "cub3d");
+	data.mlx_win = mlx_new_window(data.mlx, data.window_width, data.window_height, "cub3d");
 	if (!data.mlx_win)
 	{
 		// TODO: free mlx and data;
 		return (1);
 	}
-	printf("data.width = %d | data.height = %d\n", data.width, data.height);
-	data.img = mlx_new_image(data.mlx, data.width * TILE_SIZE, data.height
-			* TILE_SIZE);
+	data.img = mlx_new_image(data.mlx, data.window_width, data.window_height);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel,
 			&data.line_length, &data.endian);
 	init_var(&data);

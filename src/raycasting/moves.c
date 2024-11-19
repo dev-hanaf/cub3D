@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:39:27 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/17 08:50:40 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:35:45 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	move_player(t_cube *data, double new_x, double new_y)
 
 void	key_code_help(int keycode, t_cube *data)
 {
-	double	new_x, (new_y);
+	double new_x, (new_y);
 	new_x = 0;
 	new_y = 0;
 	if (keycode == 119)
