@@ -6,22 +6,16 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:36:48 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/12 03:26:52 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:35:53 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-double	normalize_angle(double angle)
-{
-	angle = fmod(angle, 2 * M_PI);
-	if (angle < 0)
-		angle += 2 * M_PI;
-	return (angle);
-}
-
 void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray)
 {
+	current_ray->was_hit_vertical = 0;
+	current_ray->was_hit_horizontal = 0;
 	if (cast->distance_h < cast->distance_v)
 	{
 		data->closest_dis = cast->distance_h;
@@ -30,6 +24,7 @@ void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray)
 		current_ray->distance = cast->distance_h;
 		current_ray->wallhitx = cast->xintercept_h;
 		current_ray->wallhity = cast->yintercept_h;
+		current_ray->was_hit_horizontal = 1;
 	}
 	else
 	{
@@ -39,8 +34,24 @@ void	calcul_closest_distance(t_cast *cast, t_cube *data, t_ray *current_ray)
 		current_ray->distance = cast->distance_v;
 		current_ray->wallhitx = cast->xintercept_v;
 		current_ray->wallhity = cast->yintercept_v;
-		// printf("\nVERTICAL x = %f, y = %f\n", xintercept_v, yintercept_v);
+		current_ray->was_hit_vertical = 1;
 	}
+}
+
+void	fill_direction(t_ray *current_ray, t_cube *data)
+{
+	current_ray->is_up = 0;
+	current_ray->is_down = 0;
+	current_ray->is_left = 0;
+	current_ray->is_right = 0;
+	if (data->ray_up)
+		current_ray->is_up = 1;
+	if (data->ray_down)
+		current_ray->is_down = 1;
+	if (data->ray_left)
+		current_ray->is_left = 1;
+	if (data->ray_right)
+		current_ray->is_right = 1;
 }
 
 void	cast(t_cube *data, t_ray *current_ray)
@@ -56,9 +67,8 @@ void	cast(t_cube *data, t_ray *current_ray)
 	data->ray_down = !data->ray_up;
 	data->ray_right = data->ray_angle < M_PI_2 || data->ray_angle > 3 * M_PI_2;
 	data->ray_left = !data->ray_right;
-	// find first horizontal intercept
+	fill_direction(current_ray, data);
 	find_hor_hit(cast, data);
-	// Vertical intersection
 	find_ver_hit(cast, data);
 	cast->dx_h = cast->xintercept_h - data->pixel_x;
 	cast->dy_h = cast->yintercept_h - data->pixel_y;
@@ -67,6 +77,7 @@ void	cast(t_cube *data, t_ray *current_ray)
 	cast->dy_v = cast->yintercept_v - data->pixel_y;
 	cast->distance_v = sqrt(cast->dx_v * cast->dx_v + cast->dy_v * cast->dy_v);
 	calcul_closest_distance(cast, data, current_ray);
+	free(cast);
 }
 
 void	init_rays(t_cube *data)
@@ -95,7 +106,8 @@ void	cast_all_rays(t_cube *data)
 	double	ray_increment;
 
 	ray_id = 0;
-	ray_increment = data->fov / (data->width * 32);
+	data->num_of_rays = data->window_width;
+	ray_increment = data->fov / data->num_of_rays;
 	data->ray_angle = data->rotation_angle - (data->fov / 2);
 	data->wallhitx = 0;
 	data->wallhity = 0;
@@ -106,7 +118,6 @@ void	cast_all_rays(t_cube *data)
 		data->ray_angle = normalize_angle(data->ray_angle);
 		data->rays[ray_id].ray_angle = data->ray_angle;
 		cast(data, &data->rays[ray_id]);
-		draw_ray(data);
 		data->ray_angle += ray_increment;
 		ray_id += 1;
 	}

@@ -1,15 +1,16 @@
-                NO      ./textures/hitler.xpm
-SO               ./textures/hitler.xpm
-                       
-WE ./textures/hitler.xpm
-               
-EA ./textures/hitler.xpm
+                 
+F 220           ,      231      , 0
+WE        textures/test1.xpm
 
-F 0,255,0
+                                   NO                 textures/test1.xpm
 
-C 56,255,230
+    SO       textures/test1.xpm
 
 
+
+EA                  textures/test1.xpm
+
+C   225,9,30
 
                                                         11111111111111111111111111111111111111111111111
                                                        100000000000000000000000000000000000000000000011

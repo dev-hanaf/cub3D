@@ -6,7 +6,7 @@
 /*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:30:32 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/12 03:24:22 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:38:40 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,8 @@ int	hit_wall(t_cube *data, double x, double y)
 	int	tile_x;
 	int	tile_y;
 
-	tile_x = floor(x / 32);
-	tile_y = floor(y / 32);
-	// printf("bounds: x=%d, y=%d\n", tile_x, tile_y);
-	// if (tile_x <= 0 || tile_x  >= data->width * 32 || 
-    //     tile_y <= 0 || tile_y  >= data->height * 32)
-    // {
-    //     return (0);
-    // }
+	tile_x = floor(x / TILE_SIZE);
+	tile_y = floor(y / TILE_SIZE);
 	if (tile_x < 0 || tile_x >= data->width || tile_y < 0
 		|| tile_y >= data->height)
 		return (1);
@@ -33,11 +27,12 @@ int	hit_wall(t_cube *data, double x, double y)
 
 void	my_mlx_pixel_put(t_cube *data, int x, int y, int color)
 {
-	//  if (x < 0 || x >= data->width * 32 || 
-    //     y < 0 || y >= data->height * 32)
-    //     return;
 	char	*dst;
 
+    if (x < 0 || x >= data->window_width || y < 0 || y >= data->window_height)
+	{
+		return;
+	}
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
@@ -68,12 +63,12 @@ void	draw_grid_lines(t_cube *data)
 	j = 0;
 	while (i < data->height)
 	{
-		draw_line(data, 0, i * 32, data->width * 32, 1);
+		draw_line(data, 0, i * TILE_SIZE, data->width * TILE_SIZE, 1);
 		i++;
 	}
 	while (j < data->width)
 	{
-		draw_line(data, j * 32, 0, data->height * 32, 0);
+		draw_line(data, j * TILE_SIZE, 0, data->height * TILE_SIZE, 0);
 		j++;
 	}
 }

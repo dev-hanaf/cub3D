@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/07 01:05:19 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/18 16:59:12 by ahanaf           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
 void	file_name(char *path)
@@ -83,6 +71,8 @@ void	init(char *av, t_cube *data)
 	int		i;
 	char	*line;
 
+	data->window_width = 1920;
+  data->window_height = 1080;
 	initialize_file_reading(data, av, &fd);
 	i = 0;
 	line = NULL;
