@@ -33,13 +33,12 @@ char	*copy(char *dest, char *src, unsigned int n)
 	return (dest);
 }
 
-
 void	validate_and_set_map_dimensions(t_cube *data, int *i)
 {
 	int	h;
 	int	w;
-	int counter;
-	
+	int	counter;
+
 	counter = 0;
 	h = *i;
 	w = 0;
@@ -53,11 +52,11 @@ void	validate_and_set_map_dimensions(t_cube *data, int *i)
 	{
 		if (data->map[*i] && data->map[*i][0] == 10)
 			counter++;
-		else if ((int) ft_strlen(data->map[*i]) > w)
+		else if ((int)ft_strlen(data->map[*i]) > w)
 			w = ft_strlen(data->map[*i]) - 1;
 		(*i)++;
 	}
-	h = (*i - counter) - h ;
+	h = (*i - counter) - h;
 	data->height = h;
 	data->width = w;
 }
@@ -78,7 +77,7 @@ void	allocate_and_copy_map(t_cube *data, int tmp_i)
 		if (data->map[i] && data->map[i][0] == 10)
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		map[j] = malloc(sizeof(char) * (data->width + 1));
 		if (map[j] == NULL)
