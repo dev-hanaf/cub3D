@@ -1,7 +1,7 @@
 
                  
 F 220           ,      231      , 0
-WE        textures/test1.xpm
+WE        textures/bluestone.xpm
    
 
 
@@ -9,15 +9,13 @@ WE        textures/test1.xpm
 						
 NO                 textures/hitler.xpm
 
-                                   NO                 textures/test1.xpm
-
-    SO       textures/test1.xpm
+    SO       textures/colorstone.xpm
 
 
 
-EA                  textures/test1.xpm
+EA                  textures/hanaf2.xpm
 
-
+C 220, 10, 15
 
 
 

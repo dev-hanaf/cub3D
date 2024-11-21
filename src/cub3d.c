@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 21:18:34 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/19 21:23:08 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/21 06:58:41 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	to_remove_function(t_cube *data)
-{
-	int	j;
-
-	j = 0;
-	while (data->map[j])
-		printf("|%s|\n", data->map[j++]);
-	j = 0;
-	while (j < 6)
-	{
-		printf("key->%s, value->|%s|\n", data->object[j].key,
-			data->object[j].value);
-		j++;
-	}
-}
 
 int	ft_close(t_cube *data)
 {
@@ -97,6 +81,29 @@ void	check_textures(t_cube *data)
 	validate_xpm(data);
 }
 
+int	mlx_failed(t_cube *data, int status)
+{
+	if (status == 2)
+	{
+		mlx_destroy_image(data->mlx, data->image->south);
+		mlx_destroy_image(data->mlx, data->image->north);
+		mlx_destroy_image(data->mlx, data->image->west);
+		mlx_destroy_image(data->mlx, data->image->east);
+		mlx_destroy_image(data->mlx, data->img1);
+		mlx_destroy_image(data->mlx, data->img2);
+		mlx_destroy_image(data->mlx, data->img3);
+		mlx_destroy_image(data->mlx, data->img4);
+		mlx_destroy_image(data->mlx, data->img);
+		mlx_destroy_window(data->mlx, data->mlx_win);
+		mlx_destroy_display(data->mlx);
+		free_all(data);
+		free(data->mlx);
+	}
+	else
+		free_all(data);
+	return (1);
+}
+
 int	main(int ac, char **av)
 {
 	t_cube	data;
@@ -107,12 +114,12 @@ int	main(int ac, char **av)
 	init(av[1], &data);
 	data.mlx = mlx_init();
 	if (data.mlx == NULL)
-		return (1); //	function return int and free
+		return (mlx_failed(&data, 1));
 	check_textures(&data);
 	data.mlx_win = mlx_new_window(data.mlx, data.window_width,
 			data.window_height, "cub3d");
 	if (!data.mlx_win)
-		return (1); //	function return int and free
+		return (mlx_failed(&data, 2));
 	data.img = mlx_new_image(data.mlx, data.window_width, data.window_height);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel,
 			&data.line_length, &data.endian);

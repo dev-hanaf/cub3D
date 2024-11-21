@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:59:49 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/19 21:21:09 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/21 05:55:39 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	free_data_map(t_cube *data)
+{
+	int	i;
+
+	i = 0;
+	if (data->map)
+	{
+		while (data->map[i])
+			free(data->map[i++]);
+		free(data->map);
+	}
+}
 
 void	free_all(t_cube *data)
 {
@@ -19,13 +32,7 @@ void	free_all(t_cube *data)
 	i = 0;
 	if (data)
 	{
-		if (data->map)
-		{
-			while (data->map[i])
-				free(data->map[i++]);
-			free(data->map);
-		}
-		i = 0;
+		free_data_map(data);
 		if (data->object && data->textures->map)
 		{
 			while (i <= data->idx)

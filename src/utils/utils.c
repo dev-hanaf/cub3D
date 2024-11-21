@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:54:58 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/19 21:24:24 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/21 06:58:59 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,20 @@ bool	is_player(char c)
 	if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
 		return (true);
 	return (false);
+}
+
+void	to_remove_function(t_cube *data)
+{
+	int	j;
+
+	j = 0;
+	while (data->map[j])
+		printf("|%s|\n", data->map[j++]);
+	j = 0;
+	while (j < 6)
+	{
+		printf("key->%s, value->|%s|\n", data->object[j].key,
+			data->object[j].value);
+		j++;
+	}
 }
