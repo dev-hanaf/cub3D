@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_hits.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 05:33:44 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/18 10:37:09 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:54:35 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,11 @@ void	horizontal_hit(t_cast *cast, t_cube *data)
 
 void	find_hor_hit(t_cast *cast, t_cube *data)
 {
-	// horizontal intercept
 	cast->yintercept_h = floor(data->pixel_y / TILE_SIZE) * TILE_SIZE;
 	if (data->ray_down)
 		cast->yintercept_h += TILE_SIZE;
 	cast->xintercept_h = data->pixel_x + (cast->yintercept_h - data->pixel_y)
 		/ tan(data->ray_angle);
-	// calcul steps
 	cast->ysteps_h = TILE_SIZE;
 	if (data->ray_up)
 		cast->ysteps_h *= -1;
@@ -52,7 +50,6 @@ void	find_hor_hit(t_cast *cast, t_cube *data)
 	if ((data->ray_left && cast->xsteps_h > 0) || (data->ray_right
 			&& cast->xsteps_h < 0))
 		cast->xsteps_h *= -1;
-	//====== check hit wall hor
 	cast->check_x = 0;
 	cast->check_y = 0;
 	cast->next_x_h = cast->xintercept_h;
@@ -74,7 +71,6 @@ void	vertical_hit(t_cast *cast, t_cube *data)
 			cast->check_x = cast->next_x_v - 1;
 		else
 			cast->check_x = cast->next_x_v;
-		// check_x = next_x_v;
 		cast->check_y = cast->next_y_v;
 		if (hit_wall(data, cast->check_x, cast->check_y))
 		{
@@ -94,7 +90,6 @@ void	find_ver_hit(t_cast *cast, t_cube *data)
 		cast->xintercept_v += TILE_SIZE;
 	cast->yintercept_v = data->pixel_y + (cast->xintercept_v - data->pixel_x)
 		* tan(data->ray_angle);
-	//============= steps
 	cast->xsteps_v = TILE_SIZE;
 	if (data->ray_left)
 		cast->xsteps_v *= -1;

@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -O3 -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror  -g3 #-fsanitize=address
 AR = ar rcs
 
 LIBFT = ./includes/libft
@@ -36,5 +36,5 @@ fclean: clean
 re: fclean all
 
 sup: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cub3D maps/map1.cub
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cub3D maps/test.cub
 .SECONDARY : $(OBJ)

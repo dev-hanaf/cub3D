@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 21:16:34 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/19 21:18:21 by hfafouri         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:54:07 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ typedef struct s_cube
 	t_map_data	*object;
 	t_textures	*textures;
 	t_images	*image;
-	t_rgb		rgb[2];
+	// t_rgb		rgb[2];
+	int 		rgb[6];
 	// hfafouri
 	double		wallhitx;
 	double		wallhity;
@@ -261,8 +262,19 @@ void			set_object(t_cube *data, int *i);
 bool			get_key(t_cube *data, int i, int *z, char **key);
 void			get_value(t_cube *data, int i, int *z, char **value);
 void			parse_rgb(t_cube *data);
-int				advanced_atoi(char *str, char **splite, t_cube *data);
+int				advanced_atoi(char *str);
 void			free_images(t_cube *data);
+void			get_rgb(t_cube *data, char *value, int *i, int start);
+void			get_comma(t_cube *data, char *value, int *i);
+void			rgb_tail(t_cube *data, char *value, int *i);
+void			get_floor_ciel(t_cube *data, char *value, int fc);
+int				create_rgb(bool floor, int *array);
+
+void			comma_counter(t_cube *data, char *rgb);
+int				verify_rgb_numbers(int *arr);
+void			free_rgb(t_cube *data, char **r, char **g, char **b);
+void			fill_floor_ciel(t_cube *data, char *value, int fc);
+
 /********************** utils ******************************** */
 char			**split_whitespaces(char *str, char *seps);
 void			write_errors(t_cube *data, t_status status);

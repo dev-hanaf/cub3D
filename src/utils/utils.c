@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:54:58 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/21 06:58:59 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/22 08:41:24 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,6 @@ void	to_remove_function(t_cube *data)
 			data->object[j].value);
 		j++;
 	}
+	printf("floor ------------------------> %d\n", data->floor);
+	printf("ciel  ------------------------> %d\n", data->ciel);
 }

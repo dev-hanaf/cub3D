@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:59:49 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/21 05:55:39 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/22 09:25:55 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	free_all(t_cube *data)
 		free_data_map(data);
 		if (data->object && data->textures->map)
 		{
-			while (i <= data->idx)
+			while (i <= data->idx && check_directions_colors(data, NULL))
 			{
 				free(data->object[i].key);
 				free(data->object[i++].value);
