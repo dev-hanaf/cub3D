@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hfafouri <hfafouri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 03:48:41 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/18 17:10:48 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/24 00:14:48 by hfafouri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ bool	get_key(t_cube *data, int i, int *z, char **key)
 	char	c[2];
 
 	j = *z;
-	while (data->map[i][j] != 10 && white_spaces(data->map[i][j]))
+	while (data->map[i][j] && data->map[i][j] != 10
+		&& white_spaces(data->map[i][j]))
 		j++;
 	*z = j;
-	if (data->map[i][j] == '1' || data->map[i][j] == '0')
+	if (data->map[i][j] && (data->map[i][j] == '1' || data->map[i][j] == '0'))
 		return (true);
-	while (data->map[i][j] != 10 && !white_spaces(data->map[i][j]))
+	while (data->map[i][j] && data->map[i][j] != 10
+		&& !white_spaces(data->map[i][j]))
 	{
 		ft_strcpy(c, data->map[i][j]);
 		*key = ft_strjoin(*key, c);
@@ -39,10 +41,11 @@ void	get_value(t_cube *data, int i, int *z, char **value)
 	char	c[2];
 
 	j = *z;
-	while (data->map[i][j] != 10 && white_spaces(data->map[i][j]))
+	while (data->map[i][j] && data->map[i][j] != 10
+		&& white_spaces(data->map[i][j]))
 		j++;
 	*z = j;
-	while (data->map[i][j] != 10)
+	while (data->map[i][j] && data->map[i][j] != 10)
 	{
 		ft_strcpy(c, data->map[i][j]);
 		*value = ft_strjoin(*value, c);

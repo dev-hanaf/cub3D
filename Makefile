@@ -1,12 +1,17 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror  -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 
 LIBFT = ./includes/libft
 MLX = -lmlx_Linux -lXext -lX11 -lm
 
-SRC = $(wildcard src/*.c)  $(wildcard src/*/*.c) 
-
+SRC = src/cub3d.c src/parsing/advanced_atoi.c src/parsing/free.c src/parsing/get_next_line.c\
+	src/parsing/get_next_line_utils.c src/parsing/init.c src/parsing/map_builder.c src/parsing/map.c\
+	src/parsing/map_parser.c src/parsing/rgb.c src/parsing/rgb_loop.c src/parsing/splite.c\
+	src/parsing/utils.c src/raycasting/draw.c src/raycasting/fill_map.c src/raycasting/find_hits.c\
+	src/raycasting/init_var.c src/raycasting/moves.c src/raycasting/raycasting.c\
+	src/raycasting/wall_projection.c src/utils/utils1.c src/utils/utils.c
+ 
 
 OBJ = $(SRC:.c=.o)
 NAME = cub3D
@@ -35,6 +40,4 @@ fclean: clean
 
 re: fclean all
 
-sup: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cub3D maps/test.cub
 .SECONDARY : $(OBJ)
