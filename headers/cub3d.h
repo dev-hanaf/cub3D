@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 21:16:34 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/22 08:54:07 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/23 23:44:00 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,7 @@ typedef struct s_cube
 	t_map_data	*object;
 	t_textures	*textures;
 	t_images	*image;
-	// t_rgb		rgb[2];
-	int 		rgb[6];
-	// hfafouri
+	int			rgb[6];
 	double		wallhitx;
 	double		wallhity;
 	double		correct_ray;

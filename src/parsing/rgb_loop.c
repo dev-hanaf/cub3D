@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 08:50:32 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/22 09:29:37 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/23 23:41:25 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	get_rgb(t_cube *data, char *value, int *i, int start)
 		(*i)++;
 	if (value[*i] && !ft_isdigit(value[*i]))
 	{
-		dprintf(2, "Error: not a digit in the first check ft_isdigit RED\n");
+		ft_putstr_fd("Error\nnot a digit in the first check ft_isdigit RED", 2);
 		free_all(data);
 		exit(EXIT_FAILURE);
 	}
@@ -36,7 +36,7 @@ void	get_comma(t_cube *data, char *value, int *i)
 		(*i)++;
 	if (value[*i] && value[*i] != ',')
 	{
-		dprintf(2, "Error: not a comma\n");
+		ft_putstr_fd("Error\nnot a comma", 2);
 		free_all(data);
 		exit(EXIT_FAILURE);
 	}
@@ -49,7 +49,7 @@ void	rgb_tail(t_cube *data, char *value, int *i)
 		(*i)++;
 	if (value[*i] != '\0')
 	{
-		dprintf(2, "Error: there is characters after blue\n");
+		ft_putstr_fd("Error\nthere is characters after blue", 2);
 		free_all(data);
 		exit(EXIT_FAILURE);
 	}

@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 21:18:34 by hfafouri          #+#    #+#             */
-/*   Updated: 2024/11/21 06:58:41 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/23 23:40:18 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	validate_xpm(t_cube *data)
 			mlx_destroy_image(data->mlx, data->image->west);
 		if (data->image->east)
 			mlx_destroy_image(data->mlx, data->image->east);
-		dprintf(2, "Error : xpm_file_to_image == NULL\n");
+		ft_putstr_fd("Error\nxpm_file_to_image == NULL", 2);
 		mlx_destroy_display(data->mlx);
 		free_all(data);
 		free(data->mlx);

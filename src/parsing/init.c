@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 05:52:54 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/21 05:52:55 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/23 23:45:04 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	controller(t_cube *data)
 	validate_and_set_map_dimensions(data, &i);
 	parse_rgb(data);
 	allocate_and_copy_map(data, tmp_i);
-	to_remove_function(data);
 	parse_map(data);
 }
 

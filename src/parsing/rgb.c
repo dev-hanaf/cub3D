@@ -6,7 +6,7 @@
 /*   By: ahanaf <ahanaf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 06:59:01 by ahanaf            #+#    #+#             */
-/*   Updated: 2024/11/22 09:08:45 by ahanaf           ###   ########.fr       */
+/*   Updated: 2024/11/23 23:42:15 by ahanaf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	comma_counter(t_cube *data, char *rgb)
 	}
 	if (counter != 2 || rgb[i] != '\0')
 	{
-		dprintf(2, "Error: comma_counter\n");
+		ft_putstr_fd("Error\ncomma_counter", 2);
 		free_all(data);
 		exit(EXIT_FAILURE);
 	}
@@ -60,7 +60,7 @@ void	free_rgb(t_cube *data, char **r, char **g, char **b)
 	free(*r);
 	free(*g);
 	free(*b);
-	dprintf(2, "Error: -1337\n");
+	ft_putstr_fd("Error\n-1337", 2);
 	free_all(data);
 	exit(EXIT_FAILURE);
 }
@@ -99,7 +99,7 @@ void	parse_rgb(t_cube *data)
 		if (data->object[i].value == NULL)
 		{
 			free_all(data);
-			dprintf(2, "Error: F value == NULL\n");
+			ft_putstr_fd("Error\nvalue == NULL", 2);
 			exit(EXIT_FAILURE);
 		}
 		if (!ft_strncmp(data->object[i].key, "F", 2))
